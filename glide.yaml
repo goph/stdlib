@@ -1,5 +1,0 @@
-package: github.com/goph/stdlib
-import: []
-testImport:
-- package: github.com/sirupsen/logrus
-  version: ^1.0.0
