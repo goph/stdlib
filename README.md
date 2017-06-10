@@ -1,8 +1,8 @@
-# Utilz
+# Stdlib
 
-[![Build Status](https://img.shields.io/travis/sagikazarmark/utilz.svg?style=flat-square)](https://travis-ci.org/sagikazarmark/utilz)
-[![Go Report Card](https://goreportcard.com/badge/github.com/sagikazarmark/utilz?style=flat-square)](https://goreportcard.com/report/github.com/sagikazarmark/utilz)
-[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/sagikazarmark/utilz)
+[![Build Status](https://img.shields.io/travis/goph/stdlib.svg?style=flat-square)](https://travis-ci.org/goph/stdlib)
+[![Go Report Card](https://goreportcard.com/badge/github.com/goph/stdlib?style=flat-square)](https://goreportcard.com/report/github.com/goph/stdlib)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/goph/stdlib)
 
 **All kinds of utilities and extensions of the standard library.**
 

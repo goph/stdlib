@@ -1,4 +1,4 @@
-package: github.com/sagikazarmark/utilz
+package: github.com/goph/stdlib
 import: []
 testImport:
 - package: github.com/sirupsen/logrus
