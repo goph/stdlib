@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Removed
+
+- `ShutdownManager` since it's not really an extension of the stdlib.
+
+
 ## 0.2.1 - 2017-05-26
 
 ### Added
