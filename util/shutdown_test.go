@@ -1,4 +1,4 @@
-package util_test
+package util
 
 import (
 	"testing"
@@ -6,26 +6,25 @@ import (
 	"fmt"
 
 	"github.com/goph/stdlib/errors"
-	"github.com/goph/stdlib/util"
 )
 
-func CreateShutdownFunc() (util.ShutdownHandler, *bool) {
+func CreateShutdownFunc() (ShutdownHandler, *bool) {
 	var called bool
 
-	f := util.ShutdownFunc(func() {
+	f := ShutdownFunc(func() {
 		called = true
 	})
 
 	return f, &called
 }
 
-func CreateOrderedShutdownFuncs(num int) ([]util.ShutdownHandler, *[]int) {
-	funcs := make([]util.ShutdownHandler, num)
+func CreateOrderedShutdownFuncs(num int) ([]ShutdownHandler, *[]int) {
+	funcs := make([]ShutdownHandler, num)
 	called := []int{}
 
 	for index := 0; index < num; index++ {
-		funcs[index] = func(index int) util.ShutdownHandler {
-			return util.ShutdownFunc(func() {
+		funcs[index] = func(index int) ShutdownHandler {
+			return ShutdownFunc(func() {
 				called = append(called, index+1)
 			})
 		}(index)
@@ -51,7 +50,7 @@ func TestShutdownFunc_CallsUnderlyingFunc(t *testing.T) {
 func TestShutdownFunc_RecoversErrorPanic(t *testing.T) {
 	err := fmt.Errorf("internal error")
 
-	f := util.ShutdownFunc(func() {
+	f := ShutdownFunc(func() {
 		panic(err)
 	})
 
@@ -61,7 +60,7 @@ func TestShutdownFunc_RecoversErrorPanic(t *testing.T) {
 }
 
 func TestShutdownFunc_RecoversStringPanic(t *testing.T) {
-	f := util.ShutdownFunc(func() {
+	f := ShutdownFunc(func() {
 		panic("internal error")
 	})
 
@@ -71,7 +70,7 @@ func TestShutdownFunc_RecoversStringPanic(t *testing.T) {
 }
 
 func TestShutdownFunc_RecoversAnyPanic(t *testing.T) {
-	f := util.ShutdownFunc(func() {
+	f := ShutdownFunc(func() {
 		panic(123)
 	})
 
@@ -81,7 +80,7 @@ func TestShutdownFunc_RecoversAnyPanic(t *testing.T) {
 }
 
 func TestNewShutdownManager(t *testing.T) {
-	shutdownManager := util.NewShutdownManager(nil)
+	shutdownManager := NewShutdownManager(nil)
 
 	// Test falling back to NullHandler
 	shutdownManager.Register(func() error {
@@ -95,7 +94,7 @@ func TestShutdownManager_Register(t *testing.T) {
 	f, called := CreateShutdownFunc()
 
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	shutdownManager.Register(f)
 	shutdownManager.Shutdown()
@@ -109,7 +108,7 @@ func TestShutdownManager_Register_ExecutedInOrder(t *testing.T) {
 	funcs, called := CreateOrderedShutdownFuncs(2)
 
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	shutdownManager.Register(funcs[0], funcs[1])
 	shutdownManager.Shutdown()
@@ -127,7 +126,7 @@ func TestShutdownManager_RegisterAsFirst(t *testing.T) {
 	funcs, called := CreateOrderedShutdownFuncs(2)
 
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	shutdownManager.Register(funcs[1])
 	shutdownManager.RegisterAsFirst(funcs[0])
@@ -144,7 +143,7 @@ func TestShutdownManager_RegisterAsFirst(t *testing.T) {
 
 func TestShutdownManager_Shutdown(t *testing.T) {
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	shutdownManager.Shutdown()
 
@@ -155,7 +154,7 @@ func TestShutdownManager_Shutdown(t *testing.T) {
 
 func TestShutdownManager_Shutdown_HandleErrors(t *testing.T) {
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	err := fmt.Errorf("error")
 
@@ -172,7 +171,7 @@ func TestShutdownManager_Shutdown_HandleErrors(t *testing.T) {
 
 func TestShutdownManager_Shutdown_RecoverFromPanic(t *testing.T) {
 	handler := errors.NewTestHandler()
-	shutdownManager := util.NewShutdownManager(handler)
+	shutdownManager := NewShutdownManager(handler)
 
 	err := fmt.Errorf("error")
 

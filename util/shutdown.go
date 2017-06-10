@@ -1,6 +1,6 @@
 package util
 
-import "github.com/sagikazarmark/utilz/errors"
+import "github.com/goph/stdlib/errors"
 
 // ShutdownManager manages an application shutdown by calling the registered handlers.
 type ShutdownManager struct {
