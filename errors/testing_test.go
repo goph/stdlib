@@ -1,15 +1,13 @@
-package errors_test
+package errors
 
 import (
 	"testing"
 
 	"fmt"
-
-	"github.com/sagikazarmark/utilz/errors"
 )
 
 func TestTestHandler_Handle(t *testing.T) {
-	handler := errors.NewTestHandler()
+	handler := NewTestHandler()
 
 	err := fmt.Errorf("internal error")
 
@@ -21,7 +19,7 @@ func TestTestHandler_Handle(t *testing.T) {
 }
 
 func TestTestHandler_Errors(t *testing.T) {
-	handler := errors.NewTestHandler()
+	handler := NewTestHandler()
 
 	err1 := fmt.Errorf("internal error")
 	err2 := fmt.Errorf("internal error")
@@ -35,7 +33,7 @@ func TestTestHandler_Errors(t *testing.T) {
 }
 
 func TestTestHandler_Last(t *testing.T) {
-	handler := errors.NewTestHandler()
+	handler := NewTestHandler()
 
 	err1 := fmt.Errorf("internal error")
 	err2 := fmt.Errorf("internal error")

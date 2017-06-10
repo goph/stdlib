@@ -1,17 +1,15 @@
-package errors_test
+package errors
 
 import (
 	"testing"
 
 	"fmt"
-
-	"github.com/sagikazarmark/utilz/errors"
 )
 
 func createRecoverFunc(p interface{}) func() error {
 	return func() (err error) {
 		defer func() {
-			err = errors.Recover(recover())
+			err = Recover(recover())
 		}()
 
 		panic(p)

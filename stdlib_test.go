@@ -1,10 +1,8 @@
-package utilz_test
+package stdlib
 
 import (
 	"errors"
 	"testing"
-
-	"github.com/sagikazarmark/utilz"
 )
 
 func TestMust_Panics(t *testing.T) {
@@ -14,7 +12,7 @@ func TestMust_Panics(t *testing.T) {
 		}
 	}()
 
-	utilz.Must(errors.New("should panic"))
+	Must(errors.New("should panic"))
 }
 
 func TestMust_DoesNotPanic(t *testing.T) {
@@ -24,5 +22,5 @@ func TestMust_DoesNotPanic(t *testing.T) {
 		}
 	}()
 
-	utilz.Must(nil)
+	Must(nil)
 }

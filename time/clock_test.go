@@ -1,17 +1,15 @@
-package time_test
+package time
 
 import (
 	"testing"
 
-	stdtime "time"
-
-	"github.com/sagikazarmark/utilz/time"
+	"time"
 )
 
 func TestStoppedClock_Now(t *testing.T) {
-	ti := stdtime.Date(2017, stdtime.May, 10, 22, 52, 0, 0, stdtime.UTC)
+	ti := time.Date(2017, time.May, 10, 22, 52, 0, 0, time.UTC)
 
-	clock := time.NewStoppedClock(ti)
+	clock := NewStoppedClock(ti)
 
 	if ti != clock.Now() {
 		t.Errorf("expected clock's current time to be %v", ti)
@@ -19,13 +17,13 @@ func TestStoppedClock_Now(t *testing.T) {
 }
 
 func TestClock_Now(t *testing.T) {
-	ti := stdtime.Now()
+	ti := time.Now()
 
-	stdtime.Sleep(stdtime.Nanosecond)
+	time.Sleep(time.Nanosecond)
 
-	clock := time.NewClock()
+	clock := NewClock()
 
-	if ti = ti.Add(stdtime.Second); clock.Now().After(ti) {
+	if ti = ti.Add(time.Second); clock.Now().After(ti) {
 		t.Errorf("expected clock's current time to be before %v", ti)
 	}
 }

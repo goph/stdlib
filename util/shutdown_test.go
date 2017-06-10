@@ -5,8 +5,8 @@ import (
 
 	"fmt"
 
-	"github.com/sagikazarmark/utilz/errors"
-	"github.com/sagikazarmark/utilz/util"
+	"github.com/goph/stdlib/errors"
+	"github.com/goph/stdlib/util"
 )
 
 func CreateShutdownFunc() (util.ShutdownHandler, *bool) {

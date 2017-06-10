@@ -1,13 +1,11 @@
-package net_test
+package net
 
 import (
 	"testing"
-
-	"github.com/sagikazarmark/utilz/net"
 )
 
 func TestResolveVirtualAddr(t *testing.T) {
-	addr := net.ResolveVirtualAddr("network", "addr")
+	addr := ResolveVirtualAddr("network", "addr")
 
 	if got, want := addr.Network(), "network"; got != want {
 		t.Errorf("expected %s, received %s", want, got)

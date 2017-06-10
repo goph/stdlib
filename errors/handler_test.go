@@ -1,17 +1,16 @@
-package errors_test
+package errors
 
 import (
 	"testing"
 
 	"fmt"
 
-	"github.com/sagikazarmark/utilz/errors"
 	logrus "github.com/sirupsen/logrus/hooks/test"
 )
 
 func TestLogHandler_Handle_Logrus(t *testing.T) {
 	logger, hook := logrus.NewNullLogger()
-	handler := errors.NewLogHandler(logger)
+	handler := NewLogHandler(logger)
 
 	err := fmt.Errorf("internal error")
 

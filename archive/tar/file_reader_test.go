@@ -1,37 +1,34 @@
-package tar_test
+package tar
 
 import (
-	stdtar "archive/tar"
+	"testing"
+
+	"archive/tar"
 	"bytes"
 	"compress/gzip"
 	"fmt"
 	"io"
-	"testing"
-	"time"
-
 	"io/ioutil"
-
 	"os"
-
-	"github.com/sagikazarmark/utilz/archive/tar"
+	"time"
 )
 
 func createTarGz(t *testing.T, fileName string, contents []byte) io.Reader {
-	header := &stdtar.Header{
+	header := &tar.Header{
 		Name:     fileName,
 		Mode:     0640,
 		Uid:      1000,
 		Gid:      1000,
 		Size:     int64(len(contents)),
 		ModTime:  time.Unix(1491731729, 0),
-		Typeflag: stdtar.TypeReg,
+		Typeflag: tar.TypeReg,
 		Uname:    "test",
 		Gname:    "test",
 	}
 
 	buf := new(bytes.Buffer)
 	gz := gzip.NewWriter(buf)
-	tr := stdtar.NewWriter(gz)
+	tr := tar.NewWriter(gz)
 
 	tr.WriteHeader(header)
 	tr.Write(contents)
@@ -54,7 +51,7 @@ func TestTarGzFileReader(t *testing.T) {
 	contents := []byte("test")
 	tgz := createTarGz(t, fileName, contents)
 
-	reader, err := tar.NewTarGzFileReader(tgz, fileName)
+	reader, err := NewTarGzFileReader(tgz, fileName)
 	if err != nil {
 		t.Fatalf("cannot create file reader: %v", err)
 	}
@@ -75,14 +72,14 @@ func TestTarGzFileReader_NotFound(t *testing.T) {
 	contents := []byte("test")
 	tgz := createTarGz(t, fileName, contents)
 
-	reader, err := tar.NewTarGzFileReader(tgz, "not_test.txt")
+	reader, err := NewTarGzFileReader(tgz, "not_test.txt")
 	if err != nil {
 		t.Fatalf("cannot create file reader: %v", err)
 	}
 	defer reader.Close()
 
 	_, err = ioutil.ReadAll(reader)
-	if err != tar.ErrFileNotFound {
+	if err != ErrFileNotFound {
 		t.Errorf("expected ErrFileNotFound, received: %v", err)
 	}
 }
@@ -90,7 +87,7 @@ func TestTarGzFileReader_NotFound(t *testing.T) {
 func ExampleNewTarGzFileReader() {
 	tgz, _ := os.Open("testdata/test.tar.gz")
 
-	reader, _ := tar.NewTarGzFileReader(tgz, "test.txt")
+	reader, _ := NewTarGzFileReader(tgz, "test.txt")
 	contents, _ := ioutil.ReadAll(reader)
 	fmt.Println(string(contents))
 	// Output: test

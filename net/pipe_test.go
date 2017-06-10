@@ -1,18 +1,16 @@
-package net_test
+package net
 
 import (
 	"testing"
 
 	"net"
 	"sync"
-
-	_net "github.com/sagikazarmark/utilz/net"
 )
 
 func TestPipeListen(t *testing.T) {
-	addr := _net.ResolveVirtualAddr("network", "addr")
+	addr := ResolveVirtualAddr("network", "addr")
 
-	listener, dialer := _net.PipeListen(addr)
+	listener, dialer := PipeListen(addr)
 
 	var wg sync.WaitGroup
 
