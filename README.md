@@ -13,17 +13,6 @@ The project closely follows the package structure in the [standard library](http
 and aims to provide high quality extensions and utilities.
 
 
-## Development
-
-You need [Glide](http://glide.sh/) to install dependencies.
-
-`$ make install`
-
-Run tests and linters:
-
-`$ make check`
-
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
