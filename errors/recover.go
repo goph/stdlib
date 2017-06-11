@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// Recover accepts a recovered panic (if any) and returns it as an error.
+// Recover accepts a recovered panic (if any) and converts it to an error (if necessary).
 func Recover(r interface{}) (err error) {
 	if r != nil {
 		switch x := r.(type) {
