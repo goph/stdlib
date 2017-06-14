@@ -6,6 +6,7 @@
 ### Removed
 
 - `ShutdownManager` since it's not really an extension of the stdlib.
+- Error handling code (moved to [github.ibm.com/goph/emperror](https://github.ibm.com/goph/emperror))
 
 
 ## 0.2.1 - 2017-05-26
