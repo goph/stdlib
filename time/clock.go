@@ -19,17 +19,10 @@ func (f ClockFunc) Now() time.Time {
 // SystemClock returns the current system time.
 var SystemClock = ClockFunc(time.Now)
 
-// StoppedClock shows the moment it has been stopped.
-type StoppedClock struct {
-	t time.Time
-}
-
-// NewStoppedClock returns a new StoppedClock.
-func NewStoppedClock(t time.Time) Clock {
-	return &StoppedClock{t}
-}
+// StoppedAt shows the moment it has been stopped at.
+type StoppedAt time.Time
 
 // Now tells the time when it has been stopped.
-func (c *StoppedClock) Now() time.Time {
-	return c.t
+func (c StoppedAt) Now() time.Time {
+	return time.Time(c)
 }

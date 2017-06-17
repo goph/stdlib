@@ -7,11 +7,13 @@
 
 - **time:** `ClockFunc` for making functions Clocks
 - **time:** global `SystemClock` to avoid creating new instances of Clocks
+- **time:** `StoppedAt` clock type
 
 ### Removed
 
 - `ShutdownManager` since it's not really an extension of the stdlib.
 - Error handling code (moved to [github.ibm.com/goph/emperror](https://github.ibm.com/goph/emperror))
+- **time:** `StoppedClock` (use StoppedAt instead)
 
 
 ## 0.2.1 - 2017-05-26
