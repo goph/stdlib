@@ -1,26 +1,28 @@
-package time
+package time_test
 
 import (
-	"fmt"
 	"testing"
 
-	"time"
+	"fmt"
+	stdtime "time"
+
+	"github.com/goph/stdlib/time"
 )
 
 func TestSystemClock(t *testing.T) {
-	ti := time.Now()
+	ti := stdtime.Now()
 
-	time.Sleep(time.Nanosecond)
+	stdtime.Sleep(stdtime.Nanosecond)
 
-	if ti = ti.Add(time.Second); SystemClock.Now().After(ti) {
+	if ti = ti.Add(stdtime.Second); time.SystemClock.Now().After(ti) {
 		t.Errorf("expected clock's current time to be before %v", ti)
 	}
 }
 
 func TestStoppedClock(t *testing.T) {
-	ti := time.Date(2017, time.May, 10, 22, 52, 0, 0, time.UTC)
+	ti := stdtime.Date(2017, stdtime.May, 10, 22, 52, 0, 0, stdtime.UTC)
 
-	clock := StoppedAt(ti)
+	clock := time.StoppedAt(ti)
 
 	if ti != clock.Now() {
 		t.Errorf("expected clock's current time to be %v", ti)
@@ -28,8 +30,8 @@ func TestStoppedClock(t *testing.T) {
 }
 
 func ExampleStoppedAt() {
-	t := time.Date(2017, time.May, 10, 22, 52, 0, 0, time.UTC)
-	clock := StoppedAt(t)
+	t := stdtime.Date(2017, stdtime.May, 10, 22, 52, 0, 0, stdtime.UTC)
+	clock := time.StoppedAt(t)
 
 	fmt.Println(clock.Now())
 	// Output: 2017-05-10 22:52:00 +0000 UTC

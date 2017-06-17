@@ -1,7 +1,9 @@
-package strings
+package strings_test
 
 import (
 	"testing"
+
+	"github.com/goph/stdlib/strings"
 )
 
 func TestToCamel(t *testing.T) {
@@ -42,7 +44,7 @@ func TestToCamel(t *testing.T) {
 	}
 
 	for in, want := range data {
-		if got := ToCamel(in); got != want {
+		if got := strings.ToCamel(in); got != want {
 			t.Errorf("converting '%s' to camel case failed, expected: %s, actual: %s", in, want, got)
 		}
 	}
@@ -63,7 +65,7 @@ func TestToSnake(t *testing.T) {
 	}
 
 	for in, want := range data {
-		if got := ToSnake(in); got != want {
+		if got := strings.ToSnake(in); got != want {
 			t.Errorf("converting '%s' to snake case failed, expected: %s, actual: %s", in, want, got)
 		}
 	}
@@ -84,7 +86,7 @@ func TestToSpinal(t *testing.T) {
 	}
 
 	for in, want := range data {
-		if got := ToSpinal(in); got != want {
+		if got := strings.ToSpinal(in); got != want {
 			t.Errorf("converting '%s' to spinal case failed, expected: %s, actual: %s", in, want, got)
 		}
 	}
@@ -105,7 +107,7 @@ func TestToTrain(t *testing.T) {
 	}
 
 	for in, want := range data {
-		if got := ToTrain(in); got != want {
+		if got := strings.ToTrain(in); got != want {
 			t.Errorf("converting '%s' to train case failed, expected: %s, actual: %s", in, want, got)
 		}
 	}

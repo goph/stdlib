@@ -1,20 +1,22 @@
-package net
+package net_test
 
 import (
 	"testing"
 
-	"net"
+	stdnet "net"
 	"sync"
+
+	"github.com/goph/stdlib/net"
 )
 
 func TestPipeListen(t *testing.T) {
-	addr := ResolveVirtualAddr("network", "addr")
+	addr := net.ResolveVirtualAddr("network", "addr")
 
-	listener, dialer := PipeListen(addr)
+	listener, dialer := net.PipeListen(addr)
 
 	var wg sync.WaitGroup
 
-	var clientConn, serverConn net.Conn
+	var clientConn, serverConn stdnet.Conn
 
 	writtenBytes := []byte("piped")
 	var readBytes = make([]byte, len(writtenBytes))

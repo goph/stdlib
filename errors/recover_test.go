@@ -1,15 +1,17 @@
-package errors
+package errors_test
 
 import (
 	"testing"
 
 	"fmt"
+
+	"github.com/goph/stdlib/errors"
 )
 
 func createRecoverFunc(p interface{}) func() error {
 	return func() (err error) {
 		defer func() {
-			err = Recover(recover())
+			err = errors.Recover(recover())
 		}()
 
 		panic(p)

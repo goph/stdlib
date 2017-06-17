@@ -9,6 +9,10 @@
 - **time:** global `SystemClock` to avoid creating new instances of Clocks
 - **time:** `StoppedAt` clock type
 
+### Changed
+
+- Moved back to `_test` test packages
+
 ### Removed
 
 - `ShutdownManager` since it's not really an extension of the stdlib.
