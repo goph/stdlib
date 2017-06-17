@@ -8,6 +8,17 @@ type Clock interface {
 	Now() time.Time
 }
 
+// ClockFunc wraps an ordinary function and makes it a Clock.
+type ClockFunc func() time.Time
+
+// Now calls the underlying function and returns the result.
+func (f ClockFunc) Now() time.Time {
+	return f()
+}
+
+// SystemClock returns the current system time.
+var SystemClock = ClockFunc(time.Now)
+
 // StoppedClock shows the moment it has been stopped.
 type StoppedClock struct {
 	t time.Time
@@ -21,17 +32,4 @@ func NewStoppedClock(t time.Time) Clock {
 // Now tells the time when it has been stopped.
 func (c *StoppedClock) Now() time.Time {
 	return c.t
-}
-
-// RunningClock shows the current time.
-type RunningClock struct{}
-
-// NewClock returns a new running clock.
-func NewClock() Clock {
-	return &RunningClock{}
-}
-
-// Now tells the current time.
-func (c *RunningClock) Now() time.Time {
-	return time.Now()
 }

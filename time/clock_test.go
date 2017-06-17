@@ -16,14 +16,12 @@ func TestStoppedClock_Now(t *testing.T) {
 	}
 }
 
-func TestClock_Now(t *testing.T) {
+func TestSystemClock(t *testing.T) {
 	ti := time.Now()
 
 	time.Sleep(time.Nanosecond)
 
-	clock := NewClock()
-
-	if ti = ti.Add(time.Second); clock.Now().After(ti) {
+	if ti = ti.Add(time.Second); SystemClock.Now().After(ti) {
 		t.Errorf("expected clock's current time to be before %v", ti)
 	}
 }

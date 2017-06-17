@@ -3,6 +3,11 @@
 
 ## Unreleased
 
+### Added
+
+- **time:** `ClockFunc` for making functions Clocks
+- **time:** global `SystemClock` to avoid creating new instances of Clocks
+
 ### Removed
 
 - `ShutdownManager` since it's not really an extension of the stdlib.
