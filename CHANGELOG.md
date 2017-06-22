@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **errors:** `ErrorCollection` serving as an interface for a multi-error struct
+
+
 ## 0.3.0 - 2017-06-19
 
 ### Added
