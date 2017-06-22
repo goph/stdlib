@@ -6,6 +6,7 @@
 ### Added
 
 - **errors:** `ErrorCollection` serving as an interface for a multi-error struct
+- **errors:** `MultiError` aggregating multiple errors into a single value
 
 
 ## 0.3.0 - 2017-06-19
