@@ -8,6 +8,8 @@
 - **errors:** `ErrorCollection` serving as an interface for a multi-error struct
 - **errors:** `MultiError` immutable structure aggregating multiple errors into a single value
 - **errors:** `MultiErrorBuilder` collecting and aggregating multiple errors into a single value (`MultiError`)
+- **ext:** Package ext contains some extra code which does not fit into the categorization of the stdlib
+- **ext:** Closing tools (similar to `io.Closer`)
 
 
 ## 0.3.0 - 2017-06-19
