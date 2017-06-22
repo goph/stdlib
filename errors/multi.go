@@ -14,26 +14,59 @@ func (e *MultiError) Error() string {
 }
 
 // Errors returns the list of wrapped errors.
-//
-// Since MultiError is mutable, calling this method concurrently is not safe.
 func (e *MultiError) Errors() []error {
 	return e.errors
 }
 
-// ErrorOrNil returns an error if this MultiError aggregates a list of errors,
+// SingleWrapMode defines how MultiErrorBuilder behaves when there is only one error in the list.
+type SingleWrapMode int
+
+// These constants cause MultiErrorBuilder to behave as described if there is only one error in the list.
+const (
+	AlwaysWrap   SingleWrapMode = iota // Always return a MultiError.
+	ReturnSingle                       // Return the single error.
+)
+
+// MultiErrorBuilder provides an interface for aggregating errors and exposing them as a single value.
+type MultiErrorBuilder struct {
+	errors []error
+
+	SingleWrapMode SingleWrapMode
+}
+
+// NewMultiErrorBuilder returns a new MultiErrorBuilder.
+func NewMultiErrorBuilder() *MultiErrorBuilder {
+	return &MultiErrorBuilder{
+		SingleWrapMode: AlwaysWrap,
+	}
+}
+
+// Add adds an error to the list.
+//
+// Calling this method concurrently is not safe.
+func (b *MultiErrorBuilder) Add(err error) {
+	// Do not add nil values.
+	if err == nil {
+		return
+	}
+
+	b.errors = append(b.errors, err)
+}
+
+// ErrOrNil returns a MultiError the builder aggregates a list of errors,
 // or returns nil if the list of errors is empty.
 //
 // It is useful to avoid checking if there are any errors added to the list.
-func (e *MultiError) ErrorOrNil() error {
-	// MultiError typed nil is possible, return nil.
-	if e == nil {
-		return nil
-	}
-
+func (b *MultiErrorBuilder) ErrOrNil() error {
 	// No errors added, return nil.
-	if len(e.errors) == 0 {
+	if len(b.errors) == 0 {
 		return nil
 	}
 
-	return e
+	// Return a single error when there is only one and the builder is told to do so.
+	if len(b.errors) == 1 && b.SingleWrapMode == ReturnSingle {
+		return b.errors[0]
+	}
+
+	return &MultiError{b.errors}
 }

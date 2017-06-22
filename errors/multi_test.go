@@ -3,6 +3,8 @@ package errors_test
 import (
 	"testing"
 
+	"fmt"
+
 	"github.com/goph/stdlib/errors"
 )
 
@@ -30,23 +32,44 @@ func TestMultiError_Error(t *testing.T) {
 	}
 }
 
-func TestMultiError_ErrorOrNil_NilWhenNil(t *testing.T) {
-	var err *errors.MultiError
-	err = nil
+func TestMultiErrorBuilder_ErrOrNil(t *testing.T) {
+	builder := errors.NewMultiErrorBuilder()
+
+	err := fmt.Errorf("error")
+
+	builder.Add(err)
+
+	merr := builder.ErrOrNil()
+
+	if _, ok := (merr).(*errors.MultiError); !ok {
+		t.Fatalf("expected MultiError, received %t", merr)
+	}
+
+	if got := merr.(*errors.MultiError).Errors(); got[0] != err {
+		t.Errorf(`expected %v, received: %v`, err, got[0])
+	}
+}
+
+func TestMultiErrorBuilder_ErrOrNil_NilWhenEmpty(t *testing.T) {
+	builder := errors.NewMultiErrorBuilder()
 
 	var want error
 
-	if got := err.ErrorOrNil(); got != want {
+	if got := builder.ErrOrNil(); got != want {
 		t.Errorf(`expected nil, received: %v`, got)
 	}
 }
 
-func TestMultiError_ErrorOrNil_NilWhenEmpty(t *testing.T) {
-	err := &errors.MultiError{}
+func TestMultiErrorBuilder_ErrOrNil_Single(t *testing.T) {
+	builder := &errors.MultiErrorBuilder{
+		SingleWrapMode: errors.ReturnSingle,
+	}
 
-	var want error
+	err := fmt.Errorf("error")
 
-	if got := err.ErrorOrNil(); got != want {
-		t.Errorf(`expected nil, received: %v`, got)
+	builder.Add(err)
+
+	if got := builder.ErrOrNil(); got != err {
+		t.Errorf(`expected %v, received: %v`, err, got)
 	}
 }
