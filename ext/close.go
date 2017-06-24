@@ -2,6 +2,9 @@ package ext
 
 import "github.com/goph/stdlib/errors"
 
+// NoopCloser is a dummy Closer implementation which can be used as a fallback.
+var NoopCloser = CloserFunc(func() {})
+
 // Closer is an alias interface to io.Closer.
 type Closer interface {
 	Close() error

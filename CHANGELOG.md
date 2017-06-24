@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **ext:** Dummy `ext.Closer` implementation
+
+
 ## 0.4.0 - 2017-06-22
 
 ### Added
