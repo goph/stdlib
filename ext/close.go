@@ -26,6 +26,10 @@ type Closers []Closer
 
 // Close calls the underlying Closer instances and returns all their errors as a single value.
 func (c Closers) Close() error {
+	if len(c) == 0 {
+		return nil
+	}
+
 	errBuilder := errors.NewMultiErrorBuilder()
 
 	for _, closer := range c {

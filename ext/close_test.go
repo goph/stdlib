@@ -66,6 +66,16 @@ func TestClosers(t *testing.T) {
 	}
 }
 
+func TestClosers_Empty(t *testing.T) {
+	closer := ext.Closers{}
+
+	var err error
+
+	if got, want := closer.Close(), err; got != want {
+		t.Errorf("expected to close successfully, received: %v", got)
+	}
+}
+
 func TestClosers_Error(t *testing.T) {
 	closer1 := &testCloser{}
 
