@@ -6,10 +6,15 @@ package errors
 // multiError actually implements the error interface so it can be returned as an error.
 type multiError struct {
 	errors []error
+	msg    string
 }
 
 // Error implements the error interface.
 func (e *multiError) Error() string {
+	if e.msg != "" {
+		return e.msg
+	}
+
 	return "Multiple errors happened"
 }
 
@@ -31,6 +36,7 @@ const (
 type MultiErrorBuilder struct {
 	errors []error
 
+	Message        string
 	SingleWrapMode SingleWrapMode
 }
 
@@ -68,5 +74,5 @@ func (b *MultiErrorBuilder) ErrOrNil() error {
 		return b.errors[0]
 	}
 
-	return &multiError{b.errors}
+	return &multiError{b.errors, b.Message}
 }

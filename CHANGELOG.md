@@ -3,6 +3,10 @@
 
 ## Unreleased
 
+### Added
+
+- **errors:** Optional message in `MultiErrorBuilder`
+
 ### Changed
 
 - **errors:** `MultiError` is not exported anymore

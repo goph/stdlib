@@ -49,3 +49,19 @@ func TestMultiErrorBuilder_ErrOrNil_Single(t *testing.T) {
 		t.Errorf(`expected %v, received: %v`, err, got)
 	}
 }
+
+func TestMultiErrorBuilder_Message(t *testing.T) {
+	want := "Multiple errors happened during action"
+
+	builder := &errors.MultiErrorBuilder{
+		Message: want,
+	}
+
+	err := fmt.Errorf("error")
+
+	builder.Add(err)
+
+	if got := builder.ErrOrNil().Error(); got != want {
+		t.Errorf(`expected error with message '%s', received '%s'`, want, got)
+	}
+}
