@@ -102,3 +102,12 @@ func TestClosers_Error(t *testing.T) {
 		t.Error("expected closer to be called")
 	}
 }
+
+func TestClose(t *testing.T) {
+	err := fmt.Errorf("error")
+	closer := ext.CloserFunc(func() { panic(err) })
+
+	if got := ext.Close(closer); got != err {
+		t.Errorf("expected: %v, received: %v", err, got)
+	}
+}

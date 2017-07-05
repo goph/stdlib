@@ -43,3 +43,12 @@ func (c Closers) Close() error {
 
 	return errBuilder.ErrOrNil()
 }
+
+// Close calls Close method on a struct if it implements the Closer interface.
+func Close(closer interface{}) error {
+	if c, ok := closer.(Closer); ok {
+		return c.Close()
+	}
+
+	return nil
+}

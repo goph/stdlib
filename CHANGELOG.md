@@ -6,6 +6,7 @@
 ### Added
 
 - **errors:** Optional message in `MultiErrorBuilder`
+- **ext:** `Close` function to try calling Close on interfaces
 
 ### Changed
 
