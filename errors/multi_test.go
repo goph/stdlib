@@ -8,30 +8,6 @@ import (
 	"github.com/goph/stdlib/errors"
 )
 
-func TestMultiErrorIsAnError(t *testing.T) {
-	var i interface{} = new(errors.MultiError)
-
-	if _, ok := i.(error); !ok {
-		t.Errorf("expected %t to implement error", i)
-	}
-}
-
-func TestMultiErrorIsAnErrorCollection(t *testing.T) {
-	var i interface{} = new(errors.MultiError)
-
-	if _, ok := i.(errors.ErrorCollection); !ok {
-		t.Errorf("expected %t to implement errors.ErrorCollection", i)
-	}
-}
-
-func TestMultiError_Error(t *testing.T) {
-	err := &errors.MultiError{}
-
-	if got, want := err.Error(), "Multiple errors happened"; got != want {
-		t.Errorf(`expected error "%s", received "%s"`, want, got)
-	}
-}
-
 func TestMultiErrorBuilder_ErrOrNil(t *testing.T) {
 	builder := errors.NewMultiErrorBuilder()
 
@@ -41,11 +17,11 @@ func TestMultiErrorBuilder_ErrOrNil(t *testing.T) {
 
 	merr := builder.ErrOrNil()
 
-	if _, ok := (merr).(*errors.MultiError); !ok {
-		t.Fatalf("expected MultiError, received %t", merr)
+	if _, ok := (merr).(errors.ErrorCollection); !ok {
+		t.Fatalf("expected ErrorCollection, received %t", merr)
 	}
 
-	if got := merr.(*errors.MultiError).Errors(); got[0] != err {
+	if got := merr.(errors.ErrorCollection).Errors(); got[0] != err {
 		t.Errorf(`expected %v, received: %v`, err, got[0])
 	}
 }

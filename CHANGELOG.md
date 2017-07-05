@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Changed
+
+- **errors:** `MultiError` is not exported anymore
+
+
 ## 0.4.1 - 2017-06-24
 
 ### Added

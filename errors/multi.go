@@ -1,20 +1,20 @@
 package errors
 
-// MultiError aggregates multiple errors into a single value.
+// multiError aggregates multiple errors into a single value.
 //
 // While ErrorCollection is only an interface for listing errors,
-// MultiError actually implements the error interface so it can be returned as an error.
-type MultiError struct {
+// multiError actually implements the error interface so it can be returned as an error.
+type multiError struct {
 	errors []error
 }
 
 // Error implements the error interface.
-func (e *MultiError) Error() string {
+func (e *multiError) Error() string {
 	return "Multiple errors happened"
 }
 
 // Errors returns the list of wrapped errors.
-func (e *MultiError) Errors() []error {
+func (e *multiError) Errors() []error {
 	return e.errors
 }
 
@@ -68,5 +68,5 @@ func (b *MultiErrorBuilder) ErrOrNil() error {
 		return b.errors[0]
 	}
 
-	return &MultiError{b.errors}
+	return &multiError{b.errors}
 }
