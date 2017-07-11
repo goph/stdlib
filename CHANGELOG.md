@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **errors:** `ContextualError` provides context to errors
+
+
 ## 0.5.0 - 2017-07-06
 
 ### Added
