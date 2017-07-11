@@ -26,6 +26,8 @@ func With(err error, keyvals ...interface{}) error {
 	if c, ok := err.(*contextualError); ok {
 		err = c.err
 		kvs = c.keyvals
+	} else if c, ok := err.(ContextualError); ok {
+		kvs = c.Context()
 	}
 
 	kvs = append(kvs, keyvals...)

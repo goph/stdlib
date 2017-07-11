@@ -32,6 +32,38 @@ func TestContext(t *testing.T) {
 	}
 }
 
+func TestContext_Multi(t *testing.T) {
+	t.Parallel()
+
+	err := errors.New("")
+
+	err = errors.With(errors.With(err, "a", 123), "b", 321)
+
+	cerr, ok := err.(errors.ContextualError)
+
+	if !ok {
+		t.Fatal("expected error to implement ContextualError")
+	}
+
+	ctx := cerr.Context()
+
+	if want, have := "a", ctx[0]; want != have {
+		t.Errorf("\nwant: %s\nhave: %v", want, have)
+	}
+
+	if want, have := 123, ctx[1]; want != have {
+		t.Errorf("\nwant: %d\nhave: %v", want, have)
+	}
+
+	if want, have := "b", ctx[2]; want != have {
+		t.Errorf("\nwant: %s\nhave: %v", want, have)
+	}
+
+	if want, have := 321, ctx[3]; want != have {
+		t.Errorf("\nwant: %d\nhave: %v", want, have)
+	}
+}
+
 func TestContext_MissingValue(t *testing.T) {
 	t.Parallel()
 
