@@ -14,7 +14,7 @@ type ContextualError interface {
 var ErrMissingValue = errors.New("(MISSING)")
 
 // With returns a new error with keyvals context appended to it.
-// If the wrapped error is already a contextual error created by With
+// If the wrapped error is already a contextual error created by With or WithPrefix
 // keyvals is appended to the existing context, but a new error is returned.
 func With(err error, keyvals ...interface{}) error {
 	if len(keyvals) == 0 {
@@ -41,6 +41,43 @@ func With(err error, keyvals ...interface{}) error {
 		// backing array is created if the slice must grow in With.
 		// Using the extra capacity without copying risks a data race.
 		keyvals: kvs[:len(kvs):len(kvs)],
+	}
+}
+
+// WithPrefix returns a new error with keyvals context appended to it.
+// If the wrapped error is already a contextual error created by With or WithPrefix
+// keyvals is prepended to the existing context, but a new error is returned.
+func WithPrefix(err error, keyvals ...interface{}) error {
+	if len(keyvals) == 0 {
+		return err
+	}
+
+	var prevkvs []interface{}
+
+	if c, ok := err.(*contextualError); ok {
+		err = c.err
+		prevkvs = c.keyvals
+	} else if c, ok := err.(ContextualError); ok {
+		prevkvs = c.Context()
+	}
+
+	n := len(prevkvs) + len(keyvals)
+	if len(keyvals)%2 != 0 {
+		n++
+	}
+
+	kvs := make([]interface{}, 0, n)
+	kvs = append(kvs, keyvals...)
+
+	if len(kvs)%2 != 0 {
+		kvs = append(kvs, ErrMissingValue)
+	}
+
+	kvs = append(kvs, prevkvs...)
+
+	return &contextualError{
+		err:     err,
+		keyvals: kvs,
 	}
 }
 
