@@ -9,6 +9,10 @@
 - **internal/testing:** Panic assertions
 - **os:** `MustEnv` to make sure an environment variable exists
 
+### Changed
+
+- Replaced internal testing code with [testify](https://github.com/stretchr/testify)
+
 
 ## 0.6.0 - 2017-07-06
 

@@ -7,6 +7,8 @@ import (
 	"sync"
 
 	"github.com/goph/stdlib/net"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestPipeListen(t *testing.T) {
@@ -30,14 +32,12 @@ func TestPipeListen(t *testing.T) {
 		var err error
 
 		clientConn, err = dialer.Dial()
-		if err != nil {
-			t.Fatalf("cannot dial: %v", err)
-		}
+
+		require.NoError(t, err, "cannot dial: %v")
 
 		written, err = clientConn.Write(writtenBytes)
-		if err != nil {
-			t.Fatalf("cannot write: %v", err)
-		}
+
+		require.NoError(t, err, "cannot write: %v")
 	}()
 
 	go func() {
@@ -46,23 +46,16 @@ func TestPipeListen(t *testing.T) {
 		var err error
 
 		serverConn, err = listener.Accept()
-		if err != nil {
-			t.Fatalf("cannot accept: %v", err)
-		}
+
+		require.NoError(t, err, "cannot accept: %v")
 
 		read, err = serverConn.Read(readBytes)
-		if err != nil {
-			t.Fatalf("cannot write: %v", err)
-		}
+
+		require.NoError(t, err, "cannot write: %v")
 	}()
 
 	wg.Wait()
 
-	if written != read {
-		t.Errorf("data size mismatch, written %d bytes, read %d bytes", written, read)
-	}
-
-	if string(writtenBytes) != string(readBytes) {
-		t.Errorf("data mismatch, written %d, read %d", writtenBytes, readBytes)
-	}
+	assert.Equal(t, written, read, "data size mismatch, written %v bytes, read %v bytes")
+	assert.Equal(t, writtenBytes, readBytes, "data mismatch, written %v, read %v")
 }

@@ -6,6 +6,9 @@ import (
 
 	"github.com/goph/stdlib/errors"
 	"github.com/goph/stdlib/ext"
+	"github.com/goph/stdlib/mocks"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type testCloser struct {
@@ -50,64 +53,48 @@ func TestCloserFunc_RecoversErrorPanic(t *testing.T) {
 }
 
 func TestClosers(t *testing.T) {
-	closer1 := &testCloser{}
-	closer2 := &testCloser{}
+	closer1 := &mocks.Closer{}
+	closer1.On("Close").Return(nil)
+
+	closer2 := &mocks.Closer{}
+	closer2.On("Close").Return(nil)
 
 	closer := ext.Closers{closer1, closer2}
 
-	var err error
-
-	if got, want := closer.Close(), err; got != want {
-		t.Errorf("expected to close successfully, received: %v", got)
-	}
-
-	if closer1.called != true || closer2.called != true {
-		t.Error("expected closer to be called")
-	}
+	assert.NoError(t, closer.Close())
+	closer1.AssertExpectations(t)
+	closer2.AssertExpectations(t)
 }
 
 func TestClosers_Empty(t *testing.T) {
 	closer := ext.Closers{}
 
-	var err error
-
-	if got, want := closer.Close(), err; got != want {
-		t.Errorf("expected to close successfully, received: %v", got)
-	}
+	assert.NoError(t, closer.Close())
 }
 
 func TestClosers_Error(t *testing.T) {
-	closer1 := &testCloser{}
+	closer1 := &mocks.Closer{}
+	closer1.On("Close").Return(nil)
 
 	err := fmt.Errorf("error")
-	closer2 := &testCloser{
-		err: err,
-	}
+	closer2 := &mocks.Closer{}
+	closer2.On("Close").Return(err)
 
 	closer := ext.Closers{closer1, closer2}
 
 	merr := closer.Close()
-	if merr == nil {
-		t.Fatalf("expected an error, received: %v", merr)
-	}
 
-	if merr, ok := merr.(errors.ErrorCollection); !ok {
-		e := merr.Errors()
-		if err != e[0] {
-			t.Fatalf("expected: %v, received: %v", err, e[0])
-		}
-	}
+	require.Error(t, merr)
+	require.Implements(t, (*errors.ErrorCollection)(nil), merr)
+	assert.Contains(t, merr.(errors.ErrorCollection).Errors(), err)
 
-	if closer1.called != true || closer2.called != true {
-		t.Error("expected closer to be called")
-	}
+	closer1.AssertExpectations(t)
+	closer2.AssertExpectations(t)
 }
 
 func TestClose(t *testing.T) {
 	err := fmt.Errorf("error")
 	closer := ext.CloserFunc(func() { panic(err) })
 
-	if got := ext.Close(closer); got != err {
-		t.Errorf("expected: %v, received: %v", err, got)
-	}
+	assert.Equal(t, err, closer.Close())
 }

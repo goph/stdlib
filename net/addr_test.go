@@ -4,16 +4,12 @@ import (
 	"testing"
 
 	"github.com/goph/stdlib/net"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestResolveVirtualAddr(t *testing.T) {
 	addr := net.ResolveVirtualAddr("network", "addr")
 
-	if got, want := addr.Network(), "network"; got != want {
-		t.Errorf("expected %s, received %s", want, got)
-	}
-
-	if got, want := addr.String(), "addr"; got != want {
-		t.Errorf("expected %s, received %s", want, got)
-	}
+	assert.Equal(t, "network", addr.Network())
+	assert.Equal(t, "addr", addr.String())
 }
