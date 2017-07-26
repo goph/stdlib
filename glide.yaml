@@ -2,7 +2,6 @@ package: github.com/goph/stdlib
 import: []
 testImport:
 - package: github.com/stretchr/testify
-  version: ^1.1.4
   subpackages:
   - assert
   - require
