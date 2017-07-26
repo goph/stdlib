@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/goph/stdlib/errors"
+	"github.com/goph/stdlib/internal/testing/assert"
 )
 
 func TestContext(t *testing.T) {
@@ -23,13 +24,8 @@ func TestContext(t *testing.T) {
 
 	ctx := cerr.Context()
 
-	if want, have := "a", ctx[0]; want != have {
-		t.Errorf("\nwant: %s\nhave: %v", want, have)
-	}
-
-	if want, have := 123, ctx[1]; want != have {
-		t.Errorf("\nwant: %d\nhave: %v", want, have)
-	}
+	assert.Equal(t, "a", ctx[0])
+	assert.Equal(t, 123, ctx[1])
 }
 
 func TestContext_Multi(t *testing.T) {
@@ -47,21 +43,10 @@ func TestContext_Multi(t *testing.T) {
 
 	ctx := cerr.Context()
 
-	if want, have := "a", ctx[0]; want != have {
-		t.Errorf("\nwant: %s\nhave: %v", want, have)
-	}
-
-	if want, have := 123, ctx[1]; want != have {
-		t.Errorf("\nwant: %d\nhave: %v", want, have)
-	}
-
-	if want, have := "b", ctx[2]; want != have {
-		t.Errorf("\nwant: %s\nhave: %v", want, have)
-	}
-
-	if want, have := 321, ctx[3]; want != have {
-		t.Errorf("\nwant: %d\nhave: %v", want, have)
-	}
+	assert.Equal(t, "a", ctx[0])
+	assert.Equal(t, 123, ctx[1])
+	assert.Equal(t, "b", ctx[2])
+	assert.Equal(t, 321, ctx[3])
 }
 
 func TestContext_MultiPrefix(t *testing.T) {
@@ -79,21 +64,10 @@ func TestContext_MultiPrefix(t *testing.T) {
 
 	ctx := cerr.Context()
 
-	if want, have := "a", ctx[2]; want != have {
-		t.Errorf("\nwant: %s\nhave: %v", want, have)
-	}
-
-	if want, have := 123, ctx[3]; want != have {
-		t.Errorf("\nwant: %d\nhave: %v", want, have)
-	}
-
-	if want, have := "b", ctx[0]; want != have {
-		t.Errorf("\nwant: %s\nhave: %v", want, have)
-	}
-
-	if want, have := 321, ctx[1]; want != have {
-		t.Errorf("\nwant: %d\nhave: %v", want, have)
-	}
+	assert.Equal(t, "a", ctx[2])
+	assert.Equal(t, 123, ctx[3])
+	assert.Equal(t, "b", ctx[0])
+	assert.Equal(t, 321, ctx[1])
 }
 
 func TestContext_MissingValue(t *testing.T) {

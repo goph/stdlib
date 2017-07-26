@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **internal/testing:** `Equal` assertion
+
+
 ## 0.6.0 - 2017-07-06
 
 ### Added
