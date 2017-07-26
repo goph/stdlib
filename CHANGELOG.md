@@ -7,6 +7,7 @@
 
 - **internal/testing:** `Equal` assertion
 - **internal/testing:** Panic assertions
+- **os:** `MustEnv` to make sure an environment variable exists
 
 
 ## 0.6.0 - 2017-07-06
