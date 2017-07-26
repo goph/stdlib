@@ -4,8 +4,8 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/goph/stdlib/internal/testing/assert"
 	"github.com/goph/stdlib/os"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMustEnv(t *testing.T) {

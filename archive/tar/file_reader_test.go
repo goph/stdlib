@@ -13,6 +13,8 @@ import (
 	"time"
 
 	"github.com/goph/stdlib/archive/tar"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func createTarGz(t *testing.T, fileName string, contents []byte) io.Reader {
@@ -35,15 +37,8 @@ func createTarGz(t *testing.T, fileName string, contents []byte) io.Reader {
 	tr.WriteHeader(header)
 	tr.Write(contents)
 
-	err := tr.Close()
-	if err != nil {
-		t.Fatalf("failed closing archive: %v", err)
-	}
-
-	err = gz.Close()
-	if err != nil {
-		t.Fatalf("failed finishing compression: %v", err)
-	}
+	require.NoError(t, tr.Close(), "failed closing archive: %v")
+	require.NoError(t, gz.Close(), "failed finishing compression: %v")
 
 	return buf
 }
@@ -54,19 +49,15 @@ func TestTarGzFileReader(t *testing.T) {
 	tgz := createTarGz(t, fileName, contents)
 
 	reader, err := tar.NewTarGzFileReader(tgz, fileName)
-	if err != nil {
-		t.Fatalf("cannot create file reader: %v", err)
-	}
+
+	require.NoError(t, err, "cannot create file reader: %v")
+
 	defer reader.Close()
 
-	got, err := ioutil.ReadAll(reader)
-	if err != nil {
-		t.Fatalf("cannot read file: %v", err)
-	}
+	received, err := ioutil.ReadAll(reader)
 
-	if got, want := got, contents; bytes.Compare(got, want) != 0 {
-		t.Errorf("expected test, got: %s", string(got))
-	}
+	require.NoError(t, err, "cannot read file: %v")
+	assert.Equal(t, contents, received)
 }
 
 func TestTarGzFileReader_NotFound(t *testing.T) {
@@ -75,15 +66,14 @@ func TestTarGzFileReader_NotFound(t *testing.T) {
 	tgz := createTarGz(t, fileName, contents)
 
 	reader, err := tar.NewTarGzFileReader(tgz, "not_test.txt")
-	if err != nil {
-		t.Fatalf("cannot create file reader: %v", err)
-	}
+
+	require.NoError(t, err, "cannot create file reader: %v")
+
 	defer reader.Close()
 
 	_, err = ioutil.ReadAll(reader)
-	if err != tar.ErrFileNotFound {
-		t.Errorf("expected ErrFileNotFound, received: %v", err)
-	}
+
+	assert.Equal(t, err, tar.ErrFileNotFound)
 }
 
 func ExampleNewTarGzFileReader() {

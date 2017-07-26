@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/goph/stdlib"
-	"github.com/goph/stdlib/internal/testing/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMust_Panics(t *testing.T) {

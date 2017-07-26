@@ -6,6 +6,8 @@ import (
 	"fmt"
 
 	"github.com/goph/stdlib/errors"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMultiErrorBuilder_ErrOrNil(t *testing.T) {
@@ -17,23 +19,14 @@ func TestMultiErrorBuilder_ErrOrNil(t *testing.T) {
 
 	merr := builder.ErrOrNil()
 
-	if _, ok := (merr).(errors.ErrorCollection); !ok {
-		t.Fatalf("expected ErrorCollection, received %t", merr)
-	}
-
-	if got := merr.(errors.ErrorCollection).Errors(); got[0] != err {
-		t.Errorf(`expected %v, received: %v`, err, got[0])
-	}
+	require.Implements(t, (*errors.ErrorCollection)(nil), merr)
+	assert.Equal(t, err, merr.(errors.ErrorCollection).Errors()[0])
 }
 
 func TestMultiErrorBuilder_ErrOrNil_NilWhenEmpty(t *testing.T) {
 	builder := errors.NewMultiErrorBuilder()
 
-	var want error
-
-	if got := builder.ErrOrNil(); got != want {
-		t.Errorf(`expected nil, received: %v`, got)
-	}
+	assert.NoError(t, builder.ErrOrNil())
 }
 
 func TestMultiErrorBuilder_ErrOrNil_Single(t *testing.T) {
@@ -45,9 +38,7 @@ func TestMultiErrorBuilder_ErrOrNil_Single(t *testing.T) {
 
 	builder.Add(err)
 
-	if got := builder.ErrOrNil(); got != err {
-		t.Errorf(`expected %v, received: %v`, err, got)
-	}
+	assert.Equal(t, err, builder.ErrOrNil())
 }
 
 func TestMultiErrorBuilder_Message(t *testing.T) {
@@ -61,7 +52,5 @@ func TestMultiErrorBuilder_Message(t *testing.T) {
 
 	builder.Add(err)
 
-	if got := builder.ErrOrNil().Error(); got != want {
-		t.Errorf(`expected error with message '%s', received '%s'`, want, got)
-	}
+	assert.Equal(t, want, builder.ErrOrNil().Error())
 }

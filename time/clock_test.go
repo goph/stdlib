@@ -7,6 +7,7 @@ import (
 	stdtime "time"
 
 	"github.com/goph/stdlib/time"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSystemClock(t *testing.T) {
@@ -14,9 +15,8 @@ func TestSystemClock(t *testing.T) {
 
 	stdtime.Sleep(stdtime.Nanosecond)
 
-	if ti = ti.Add(stdtime.Second); time.SystemClock.Now().After(ti) {
-		t.Errorf("expected clock's current time to be before %v", ti)
-	}
+	ti = ti.Add(stdtime.Second)
+	assert.True(t, time.SystemClock.Now().Before(ti), "expected clock's current time to be before %v", ti)
 }
 
 func TestStoppedClock(t *testing.T) {
@@ -24,9 +24,7 @@ func TestStoppedClock(t *testing.T) {
 
 	clock := time.StoppedAt(ti)
 
-	if ti != clock.Now() {
-		t.Errorf("expected clock's current time to be %v", ti)
-	}
+	assert.Equal(t, ti, clock.Now())
 }
 
 func ExampleStoppedAt() {
