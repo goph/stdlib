@@ -6,7 +6,7 @@ import (
 
 	"github.com/goph/stdlib/errors"
 	"github.com/goph/stdlib/ext"
-	"github.com/goph/stdlib/mocks"
+	"github.com/goph/stdlib/internal/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
