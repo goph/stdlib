@@ -6,7 +6,8 @@
 ### Added
 
 - **os:** `DefaultEnv` to fallback to a default value when a key is not found
-- **net/http:** `http.HandlerAcceptor` for accepting HTTP handlers
+- **net/http:** `HandlerAcceptor` for accepting HTTP handlers
+- **net/http/pprof:** `RegisterRoutes` to allow registering routes in other routers than the `http.DefaultServeMux`
 
 
 ## 0.7.0 - 2017-07-27
