@@ -9,6 +9,7 @@
 - **net/http:** `HandlerAcceptor` for accepting HTTP handlers
 - **net/http/pprof:** `RegisterRoutes` to allow registering routes in other routers than the `http.DefaultServeMux`
 - **x/net/trace:** `RegisterRoutes` to allow registering routes in other routers than the `http.DefaultServeMux`
+- **x/net/trace:** `NoAuth` to allow remote tracing
 
 
 ## 0.7.0 - 2017-07-27

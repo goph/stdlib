@@ -7,6 +7,11 @@ import (
 	"golang.org/x/net/trace"
 )
 
+// NoAuth disables authentication entirely. Useful for remote tracing.
+var NoAuth = func(req *http.Request) (any, sensitive bool) {
+	return true, true
+}
+
 // RegisterRoutes register pprof routes in an http.HandlerAcceptor.
 func RegisterRoutes(h _http.HandlerAcceptor) {
 	h.HandleFunc("/debug/requests", Traces)
