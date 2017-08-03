@@ -6,6 +6,7 @@
 ### Added
 
 - **os:** `DefaultEnv` to fallback to a default value when a key is not found
+- **net/http:** `http.HandlerAcceptor` for accepting HTTP handlers
 
 
 ## 0.7.0 - 2017-07-27
