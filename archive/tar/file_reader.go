@@ -8,23 +8,23 @@ import (
 )
 
 var (
-	// ErrFileNotFound indicates that we reached the end of the file without finding the file
+	// ErrFileNotFound indicates that we reached the end of the file without finding the file.
 	ErrFileNotFound = errors.New("File not found in the archive")
 
-	// ErrNotAFile indicates that there is a match for the path, but it's not a file (eg. it's a directory)
+	// ErrNotAFile indicates that there is a match for the path, but it's not a file (eg. it's a directory).
 	ErrNotAFile = errors.New("Not a file")
 )
 
 // tarFileReader reads a certain file from a TAR archive
-// which can also be optionally decompressed during the process
+// which can also optionally be decompressed during the process.
 type tarFileReader struct {
-	decompressor io.Closer // When there is decompression involved, the decompressor might have to be closed
+	decompressor io.Closer // When there is decompression involved, the decompressor might have to be closed.
 	archive      *tar.Reader
-	found        bool   // Whether the file has been found or not
-	file         string // The path to the file inside the archive
+	found        bool   // Whether the file has been found or not.
+	file         string // The path to the file inside the archive.
 }
 
-// NewTarGzFileReader returns a new Reader which reads a specific file from a .tar.gz archive
+// NewTarGzFileReader returns a new Reader which reads a specific file from a .tar.gz archive.
 func NewTarGzFileReader(r io.Reader, f string) (io.ReadCloser, error) {
 	gz, err := gzip.NewReader(r)
 	if err != nil {
