@@ -13,9 +13,6 @@ import (
 var (
 	// ErrFileNotFound indicates that we reached the end of the file without finding the file
 	ErrFileNotFound = errors.New("File not found in the archive")
-
-	// ErrNotAFile indicates that there is a match for the path, but it's not a file (eg. it's a directory)
-	ErrNotAFile = errors.New("Not a file")
 )
 
 // zipFileReader reads a certain file from a TAR archive
