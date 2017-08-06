@@ -28,6 +28,15 @@ $ make check
 ```
 
 
+### Experimental features
+
+When a feature is not mature or stable enough for general availability, it can be marked as *experimental*.
+
+This means that those features can only be used with the `experimental` build tag.
+
+Being experimental does not provide any BC promise.
+
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
