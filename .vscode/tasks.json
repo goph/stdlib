@@ -14,7 +14,7 @@
         },
         {
             "taskName": "test",
-            "command": "make test",
+            "command": "make ARGS=\"-tags experimental\" test",
             "type": "shell",
             "group": {
                 "kind": "test",
