@@ -1,3 +1,5 @@
+//+build experimental
+
 package zip_test
 
 import (

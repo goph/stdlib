@@ -18,4 +18,4 @@ before_install:
 
 install: make dep
 
-script: make check
+script: make ARGS="-tags experimental" check

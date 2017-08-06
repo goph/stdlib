@@ -11,7 +11,7 @@
 - **x/net/trace:** `RegisterRoutes` to allow registering routes in other routers than the `http.DefaultServeMux`
 - **x/net/trace:** `NoAuth` to allow remote tracing
 - **expvar:** `RegisterRoutes` to allow registering routes in other routers than the `http.DefaultServeMux`
-- **archive/zip:** A Reader which reads a certain file from a ZIP archive
+- **archive/zip:** *(experimental)* A Reader which reads a certain file from a ZIP archive
 
 
 ## 0.7.0 - 2017-07-27
