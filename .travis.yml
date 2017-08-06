@@ -7,6 +7,9 @@ go:
     - 1.8.x
     - tip
 
+env:
+    - TAGS=""
+    - TAGS=experimental
 matrix:
     allow_failures:
         - go: tip
@@ -18,4 +21,4 @@ before_install:
 
 install: make dep
 
-script: make ARGS="-tags experimental" check
+script: make ARGS="-tags '$TAGS'" check
