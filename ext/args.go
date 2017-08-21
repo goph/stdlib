@@ -1,6 +1,10 @@
+//+build experimental
+
 package ext
 
 import "fmt"
+
+//go:generate go run ./_codegen/args.go
 
 // Arguments represents a list of arguments with a set of type getters.
 type Arguments []interface{}
