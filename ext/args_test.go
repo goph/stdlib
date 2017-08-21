@@ -123,7 +123,7 @@ func TestArguments_Type(t *testing.T) {
 }
 
 func TestArguments_Type_Panic(t *testing.T) {
-	for typ, _ := range argumentTests {
+	for typ := range argumentTests {
 		t.Logf("Testing %s getter with panic", typ)
 
 		args := ext.Arguments{nil}

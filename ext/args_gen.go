@@ -3,6 +3,7 @@
 package ext
 
 import "fmt"
+
 // StringE returns a(n) string argument from the list or an error if it cannot be found or not string.
 func (a Arguments) StringE(index int) (string, error) {
 	arg, err := a.GetE(index)
@@ -15,6 +16,7 @@ func (a Arguments) StringE(index int) (string, error) {
 	}
 	return v, nil
 }
+
 // String returns a(n) string argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not string.
@@ -25,6 +27,7 @@ func (a Arguments) String(index int) string {
 	}
 	return arg
 }
+
 // BoolE returns a(n) bool argument from the list or an error if it cannot be found or not bool.
 func (a Arguments) BoolE(index int) (bool, error) {
 	arg, err := a.GetE(index)
@@ -37,6 +40,7 @@ func (a Arguments) BoolE(index int) (bool, error) {
 	}
 	return v, nil
 }
+
 // Bool returns a(n) bool argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not bool.
@@ -47,6 +51,7 @@ func (a Arguments) Bool(index int) bool {
 	}
 	return arg
 }
+
 // IntE returns a(n) int argument from the list or an error if it cannot be found or not int.
 func (a Arguments) IntE(index int) (int, error) {
 	arg, err := a.GetE(index)
@@ -59,6 +64,7 @@ func (a Arguments) IntE(index int) (int, error) {
 	}
 	return v, nil
 }
+
 // Int returns a(n) int argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not int.
@@ -69,6 +75,7 @@ func (a Arguments) Int(index int) int {
 	}
 	return arg
 }
+
 // Int32E returns a(n) int32 argument from the list or an error if it cannot be found or not int32.
 func (a Arguments) Int32E(index int) (int32, error) {
 	arg, err := a.GetE(index)
@@ -81,6 +88,7 @@ func (a Arguments) Int32E(index int) (int32, error) {
 	}
 	return v, nil
 }
+
 // Int32 returns a(n) int32 argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not int32.
@@ -91,6 +99,7 @@ func (a Arguments) Int32(index int) int32 {
 	}
 	return arg
 }
+
 // Int64E returns a(n) int64 argument from the list or an error if it cannot be found or not int64.
 func (a Arguments) Int64E(index int) (int64, error) {
 	arg, err := a.GetE(index)
@@ -103,6 +112,7 @@ func (a Arguments) Int64E(index int) (int64, error) {
 	}
 	return v, nil
 }
+
 // Int64 returns a(n) int64 argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not int64.
@@ -113,6 +123,7 @@ func (a Arguments) Int64(index int) int64 {
 	}
 	return arg
 }
+
 // Float32E returns a(n) float32 argument from the list or an error if it cannot be found or not float32.
 func (a Arguments) Float32E(index int) (float32, error) {
 	arg, err := a.GetE(index)
@@ -125,6 +136,7 @@ func (a Arguments) Float32E(index int) (float32, error) {
 	}
 	return v, nil
 }
+
 // Float32 returns a(n) float32 argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not float32.
@@ -135,6 +147,7 @@ func (a Arguments) Float32(index int) float32 {
 	}
 	return arg
 }
+
 // Float64E returns a(n) float64 argument from the list or an error if it cannot be found or not float64.
 func (a Arguments) Float64E(index int) (float64, error) {
 	arg, err := a.GetE(index)
@@ -147,6 +160,7 @@ func (a Arguments) Float64E(index int) (float64, error) {
 	}
 	return v, nil
 }
+
 // Float64 returns a(n) float64 argument from the list.
 //
 // It panics if the argument with such index cannot be found or it is not float64.

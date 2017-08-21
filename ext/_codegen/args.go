@@ -71,7 +71,7 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 		Name: ast.NewIdent(fmt.Sprintf("%sE", strings.ToCamel(t))),
 		Doc: &ast.CommentGroup{
 			List: []*ast.Comment{
-				&ast.Comment{
+				{
 					Text: fmt.Sprintf(
 						"// %sE returns a(n) %s argument from the list or an error if it cannot be found or not %s.",
 						strings.ToCamel(t),
@@ -83,7 +83,7 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 		},
 		Recv: &ast.FieldList{
 			List: []*ast.Field{
-				&ast.Field{
+				{
 					Names: []*ast.Ident{
 						ast.NewIdent("a"),
 					},
@@ -94,7 +94,7 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 		Type: &ast.FuncType{
 			Params: &ast.FieldList{
 				List: []*ast.Field{
-					&ast.Field{
+					{
 						Names: []*ast.Ident{
 							ast.NewIdent("index"),
 						},
@@ -104,10 +104,10 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 			},
 			Results: &ast.FieldList{
 				List: []*ast.Field{
-					&ast.Field{
+					{
 						Type: ast.NewIdent(t),
 					},
-					&ast.Field{
+					{
 						Type: ast.NewIdent("error"),
 					},
 				},
@@ -208,24 +208,24 @@ func typeGetter(t string) *ast.FuncDecl {
 		Name: ast.NewIdent(fmt.Sprintf("%s", strings.ToCamel(t))),
 		Doc: &ast.CommentGroup{
 			List: []*ast.Comment{
-				&ast.Comment{
+				{
 					Text: fmt.Sprintf(
 						"// %s returns a(n) %s argument from the list.",
 						strings.ToCamel(t),
 						t,
 					),
 				},
-				&ast.Comment{
+				{
 					Text: "//",
 				},
-				&ast.Comment{
+				{
 					Text: fmt.Sprintf("// It panics if the argument with such index cannot be found or it is not %s.", t),
 				},
 			},
 		},
 		Recv: &ast.FieldList{
 			List: []*ast.Field{
-				&ast.Field{
+				{
 					Names: []*ast.Ident{
 						ast.NewIdent("a"),
 					},
@@ -236,7 +236,7 @@ func typeGetter(t string) *ast.FuncDecl {
 		Type: &ast.FuncType{
 			Params: &ast.FieldList{
 				List: []*ast.Field{
-					&ast.Field{
+					{
 						Names: []*ast.Ident{
 							ast.NewIdent("index"),
 						},
@@ -246,7 +246,7 @@ func typeGetter(t string) *ast.FuncDecl {
 			},
 			Results: &ast.FieldList{
 				List: []*ast.Field{
-					&ast.Field{
+					{
 						Type: ast.NewIdent(t),
 					},
 				},
