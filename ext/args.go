@@ -2,30 +2,46 @@
 
 package ext
 
-import "fmt"
-
 //go:generate go run ./_codegen/args.go
 
-// Arguments represents a list of arguments with a set of type getters.
+// Arguments holds a list of arguments.
 type Arguments []interface{}
 
-// GetE returns an argument from the list or an error if it cannot be found.
-func (a Arguments) GetE(index int) (interface{}, error) {
+// Lookup retrieves an argument from the list stored under the specified the index.
+//
+// If the index is present in the list the value is returned and the boolean is true.
+//
+// Otherwise nil and false are returned.
+func (a Arguments) Lookup(index int) (interface{}, bool) {
 	if l := len(a); index >= l {
-		return nil, fmt.Errorf("no such index (%d) in the argument list: there are only %d item(s)", index, l)
+		return nil, false
 	}
 
-	return a[index], nil
+	return a[index], true
 }
 
-// Get returns an argument from the list.
+// Get retrieves an argument from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found.
+// If the index is present in the list the value is returned.
+//
+// Otherwise nil is returned. To distinguish between an empty value and an unset value, use Lookup.
 func (a Arguments) Get(index int) interface{} {
-	v, err := a.GetE(index)
-	if err != nil {
-		panic(err)
+	if v, ok := a.Lookup(index); ok {
+		return v
 	}
 
-	return v
+	return nil
+}
+
+// Default retrieves an argument from the list stored under the specified the index.
+//
+// If the index is present in the list the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) Default(index int, def interface{}) interface{} {
+	if v, ok := a.Lookup(index); ok {
+		return v
+	}
+
+	return def
 }

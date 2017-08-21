@@ -2,172 +2,282 @@
 
 package ext
 
-import "fmt"
-
-// StringE returns a(n) string argument from the list or an error if it cannot be found or not string.
-func (a Arguments) StringE(index int) (string, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return "", err
-	}
-	v, ok := arg.(string)
+// LookupString retrieves an argument of type string from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type string the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupString(index int) (string, bool) {
+	arg, ok := a.Lookup(index)
 	if !ok {
-		return "", fmt.Errorf("cannot return argument (%d) as string because it is of type %T", index, arg)
+		return "", false
 	}
-	return v, nil
+	if v, ok := arg.(string); ok {
+		return v, true
+	}
+	return "", false
 }
 
-// String returns a(n) string argument from the list.
+// String retrieves an argument of type string from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not string.
+// If the index is present in the list and it is of type string the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupString.
 func (a Arguments) String(index int) string {
-	arg, err := a.StringE(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupString(index); ok {
+		return arg
 	}
-	return arg
+	return ""
 }
 
-// BoolE returns a(n) bool argument from the list or an error if it cannot be found or not bool.
-func (a Arguments) BoolE(index int) (bool, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return false, err
-	}
-	v, ok := arg.(bool)
-	if !ok {
-		return false, fmt.Errorf("cannot return argument (%d) as bool because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Bool returns a(n) bool argument from the list.
+// DefaultString retrieves an argument of type string from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not bool.
+// If the index is present in the list and it is of type string the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultString(index int, def string) string {
+	if arg, ok := a.LookupString(index); ok {
+		return arg
+	}
+	return def
+}
+
+// LookupBool retrieves an argument of type bool from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type bool the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupBool(index int) (bool, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return false, false
+	}
+	if v, ok := arg.(bool); ok {
+		return v, true
+	}
+	return false, false
+}
+
+// Bool retrieves an argument of type bool from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type bool the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupBool.
 func (a Arguments) Bool(index int) bool {
-	arg, err := a.BoolE(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupBool(index); ok {
+		return arg
 	}
-	return arg
+	return false
 }
 
-// IntE returns a(n) int argument from the list or an error if it cannot be found or not int.
-func (a Arguments) IntE(index int) (int, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return 0, err
-	}
-	v, ok := arg.(int)
-	if !ok {
-		return 0, fmt.Errorf("cannot return argument (%d) as int because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Int returns a(n) int argument from the list.
+// DefaultBool retrieves an argument of type bool from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not int.
+// If the index is present in the list and it is of type bool the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultBool(index int, def bool) bool {
+	if arg, ok := a.LookupBool(index); ok {
+		return arg
+	}
+	return def
+}
+
+// LookupInt retrieves an argument of type int from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupInt(index int) (int, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return 0, false
+	}
+	if v, ok := arg.(int); ok {
+		return v, true
+	}
+	return 0, false
+}
+
+// Int retrieves an argument of type int from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupInt.
 func (a Arguments) Int(index int) int {
-	arg, err := a.IntE(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupInt(index); ok {
+		return arg
 	}
-	return arg
+	return 0
 }
 
-// Int32E returns a(n) int32 argument from the list or an error if it cannot be found or not int32.
-func (a Arguments) Int32E(index int) (int32, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return 0, err
-	}
-	v, ok := arg.(int32)
-	if !ok {
-		return 0, fmt.Errorf("cannot return argument (%d) as int32 because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Int32 returns a(n) int32 argument from the list.
+// DefaultInt retrieves an argument of type int from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not int32.
+// If the index is present in the list and it is of type int the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultInt(index int, def int) int {
+	if arg, ok := a.LookupInt(index); ok {
+		return arg
+	}
+	return def
+}
+
+// LookupInt32 retrieves an argument of type int32 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int32 the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupInt32(index int) (int32, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return 0, false
+	}
+	if v, ok := arg.(int32); ok {
+		return v, true
+	}
+	return 0, false
+}
+
+// Int32 retrieves an argument of type int32 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int32 the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupInt32.
 func (a Arguments) Int32(index int) int32 {
-	arg, err := a.Int32E(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupInt32(index); ok {
+		return arg
 	}
-	return arg
+	return 0
 }
 
-// Int64E returns a(n) int64 argument from the list or an error if it cannot be found or not int64.
-func (a Arguments) Int64E(index int) (int64, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return 0, err
-	}
-	v, ok := arg.(int64)
-	if !ok {
-		return 0, fmt.Errorf("cannot return argument (%d) as int64 because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Int64 returns a(n) int64 argument from the list.
+// DefaultInt32 retrieves an argument of type int32 from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not int64.
+// If the index is present in the list and it is of type int32 the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultInt32(index int, def int32) int32 {
+	if arg, ok := a.LookupInt32(index); ok {
+		return arg
+	}
+	return def
+}
+
+// LookupInt64 retrieves an argument of type int64 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int64 the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupInt64(index int) (int64, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return 0, false
+	}
+	if v, ok := arg.(int64); ok {
+		return v, true
+	}
+	return 0, false
+}
+
+// Int64 retrieves an argument of type int64 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type int64 the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupInt64.
 func (a Arguments) Int64(index int) int64 {
-	arg, err := a.Int64E(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupInt64(index); ok {
+		return arg
 	}
-	return arg
+	return 0
 }
 
-// Float32E returns a(n) float32 argument from the list or an error if it cannot be found or not float32.
-func (a Arguments) Float32E(index int) (float32, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return 0.0, err
-	}
-	v, ok := arg.(float32)
-	if !ok {
-		return 0.0, fmt.Errorf("cannot return argument (%d) as float32 because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Float32 returns a(n) float32 argument from the list.
+// DefaultInt64 retrieves an argument of type int64 from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not float32.
+// If the index is present in the list and it is of type int64 the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultInt64(index int, def int64) int64 {
+	if arg, ok := a.LookupInt64(index); ok {
+		return arg
+	}
+	return def
+}
+
+// LookupFloat32 retrieves an argument of type float32 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type float32 the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupFloat32(index int) (float32, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return 0.0, false
+	}
+	if v, ok := arg.(float32); ok {
+		return v, true
+	}
+	return 0.0, false
+}
+
+// Float32 retrieves an argument of type float32 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type float32 the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupFloat32.
 func (a Arguments) Float32(index int) float32 {
-	arg, err := a.Float32E(index)
-	if err != nil {
-		panic(err)
+	if arg, ok := a.LookupFloat32(index); ok {
+		return arg
 	}
-	return arg
+	return 0.0
 }
 
-// Float64E returns a(n) float64 argument from the list or an error if it cannot be found or not float64.
-func (a Arguments) Float64E(index int) (float64, error) {
-	arg, err := a.GetE(index)
-	if err != nil {
-		return 0.0, err
-	}
-	v, ok := arg.(float64)
-	if !ok {
-		return 0.0, fmt.Errorf("cannot return argument (%d) as float64 because it is of type %T", index, arg)
-	}
-	return v, nil
-}
-
-// Float64 returns a(n) float64 argument from the list.
+// DefaultFloat32 retrieves an argument of type float32 from the list stored under the specified the index.
 //
-// It panics if the argument with such index cannot be found or it is not float64.
-func (a Arguments) Float64(index int) float64 {
-	arg, err := a.Float64E(index)
-	if err != nil {
-		panic(err)
+// If the index is present in the list and it is of type float32 the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultFloat32(index int, def float32) float32 {
+	if arg, ok := a.LookupFloat32(index); ok {
+		return arg
 	}
-	return arg
+	return def
+}
+
+// LookupFloat64 retrieves an argument of type float64 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type float64 the value is returned and the boolean is true.
+//
+// Otherwise the type's zero value and false are returned.
+func (a Arguments) LookupFloat64(index int) (float64, bool) {
+	arg, ok := a.Lookup(index)
+	if !ok {
+		return 0.0, false
+	}
+	if v, ok := arg.(float64); ok {
+		return v, true
+	}
+	return 0.0, false
+}
+
+// Float64 retrieves an argument of type float64 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type float64 the value is returned.
+//
+// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use LookupFloat64.
+func (a Arguments) Float64(index int) float64 {
+	if arg, ok := a.LookupFloat64(index); ok {
+		return arg
+	}
+	return 0.0
+}
+
+// DefaultFloat64 retrieves an argument of type float64 from the list stored under the specified the index.
+//
+// If the index is present in the list and it is of type float64 the value is returned.
+//
+// Otherwise the specified default value is returned.
+func (a Arguments) DefaultFloat64(index int, def float64) float64 {
+	if arg, ok := a.LookupFloat64(index); ok {
+		return arg
+	}
+	return def
 }

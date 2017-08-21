@@ -11,7 +11,7 @@ import (
 )
 
 var types = []struct {
-	t   string
+	typ string
 	def string
 }{
 	{"string", `""`},
@@ -26,22 +26,15 @@ var types = []struct {
 func main() {
 	fset := token.NewFileSet()
 
-	decl := []ast.Decl{
-		&ast.GenDecl{
-			Tok: token.IMPORT,
-			Specs: []ast.Spec{
-				&ast.ImportSpec{
-					Path: &ast.BasicLit{
-						Kind:  token.STRING,
-						Value: `"fmt"`,
-					},
-				},
-			},
-		},
-	}
+	decl := []ast.Decl{}
 
 	for _, t := range types {
-		decl = append(decl, typeErrorGetter(t.t, t.def), typeGetter(t.t))
+		decl = append(
+			decl,
+			typeLookup(t.typ, t.def),
+			typeGet(t.typ, t.def),
+			typeDefault(t.typ),
+		)
 	}
 
 	file := &ast.File{
@@ -66,18 +59,32 @@ func main() {
 	}
 }
 
-func typeErrorGetter(t string, def string) *ast.FuncDecl {
+func typeLookup(t string, def string) *ast.FuncDecl {
 	return &ast.FuncDecl{
-		Name: ast.NewIdent(fmt.Sprintf("%sE", strings.ToCamel(t))),
+		Name: ast.NewIdent(fmt.Sprintf("Lookup%s", strings.ToCamel(t))),
 		Doc: &ast.CommentGroup{
 			List: []*ast.Comment{
 				{
 					Text: fmt.Sprintf(
-						"// %sE returns a(n) %s argument from the list or an error if it cannot be found or not %s.",
+						"// Lookup%s retrieves an argument of type %s from the list stored under the specified the index.",
 						strings.ToCamel(t),
 						t,
+					),
+				},
+				{
+					Text: "//",
+				},
+				{
+					Text: fmt.Sprintf(
+						"// If the index is present in the list and it is of type %s the value is returned and the boolean is true.",
 						t,
 					),
+				},
+				{
+					Text: "//",
+				},
+				{
+					Text: "// Otherwise the type's zero value and false are returned.",
 				},
 			},
 		},
@@ -108,7 +115,7 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 						Type: ast.NewIdent(t),
 					},
 					{
-						Type: ast.NewIdent("error"),
+						Type: ast.NewIdent("bool"),
 					},
 				},
 			},
@@ -119,47 +126,14 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 					Tok: token.DEFINE,
 					Lhs: []ast.Expr{
 						ast.NewIdent("arg"),
-						ast.NewIdent("err"),
-					},
-					Rhs: []ast.Expr{
-						&ast.CallExpr{
-							Fun: ast.NewIdent("a.GetE"),
-							Args: []ast.Expr{
-								ast.NewIdent("index"),
-							},
-						},
-					},
-				},
-				&ast.IfStmt{
-					Cond: &ast.BinaryExpr{
-						X:  ast.NewIdent("err"),
-						Op: token.NEQ,
-						Y:  ast.NewIdent("nil"),
-					},
-					Body: &ast.BlockStmt{
-						List: []ast.Stmt{
-							&ast.ReturnStmt{
-								Results: []ast.Expr{
-									&ast.BasicLit{
-										Kind:  token.STRING,
-										Value: def,
-									},
-									ast.NewIdent("err"),
-								},
-							},
-						},
-					},
-				},
-				&ast.AssignStmt{
-					Tok: token.DEFINE,
-					Lhs: []ast.Expr{
-						ast.NewIdent("v"),
 						ast.NewIdent("ok"),
 					},
 					Rhs: []ast.Expr{
-						&ast.TypeAssertExpr{
-							X:    ast.NewIdent("arg"),
-							Type: ast.NewIdent(t),
+						&ast.CallExpr{
+							Fun: ast.NewIdent("a.Lookup"),
+							Args: []ast.Expr{
+								ast.NewIdent("index"),
+							},
 						},
 					},
 				},
@@ -176,17 +150,33 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 										Kind:  token.STRING,
 										Value: def,
 									},
-									&ast.CallExpr{
-										Fun: ast.NewIdent("fmt.Errorf"),
-										Args: []ast.Expr{
-											&ast.BasicLit{
-												Kind:  token.STRING,
-												Value: fmt.Sprintf(`"cannot return argument (%%d) as %s because it is of type %%T"`, t),
-											},
-											ast.NewIdent("index"),
-											ast.NewIdent("arg"),
-										},
-									},
+									ast.NewIdent("false"),
+								},
+							},
+						},
+					},
+				},
+				&ast.IfStmt{
+					Init: &ast.AssignStmt{
+						Tok: token.DEFINE,
+						Lhs: []ast.Expr{
+							ast.NewIdent("v"),
+							ast.NewIdent("ok"),
+						},
+						Rhs: []ast.Expr{
+							&ast.TypeAssertExpr{
+								X:    ast.NewIdent("arg"),
+								Type: ast.NewIdent(t),
+							},
+						},
+					},
+					Cond: ast.NewIdent("ok"),
+					Body: &ast.BlockStmt{
+						List: []ast.Stmt{
+							&ast.ReturnStmt{
+								Results: []ast.Expr{
+									ast.NewIdent("v"),
+									ast.NewIdent("true"),
 								},
 							},
 						},
@@ -194,8 +184,11 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 				},
 				&ast.ReturnStmt{
 					Results: []ast.Expr{
-						ast.NewIdent("v"),
-						ast.NewIdent("nil"),
+						&ast.BasicLit{
+							Kind:  token.STRING,
+							Value: def,
+						},
+						ast.NewIdent("false"),
 					},
 				},
 			},
@@ -203,14 +196,14 @@ func typeErrorGetter(t string, def string) *ast.FuncDecl {
 	}
 }
 
-func typeGetter(t string) *ast.FuncDecl {
+func typeGet(t string, def string) *ast.FuncDecl {
 	return &ast.FuncDecl{
 		Name: ast.NewIdent(fmt.Sprintf("%s", strings.ToCamel(t))),
 		Doc: &ast.CommentGroup{
 			List: []*ast.Comment{
 				{
 					Text: fmt.Sprintf(
-						"// %s returns a(n) %s argument from the list.",
+						"// %s retrieves an argument of type %s from the list stored under the specified the index.",
 						strings.ToCamel(t),
 						t,
 					),
@@ -219,7 +212,19 @@ func typeGetter(t string) *ast.FuncDecl {
 					Text: "//",
 				},
 				{
-					Text: fmt.Sprintf("// It panics if the argument with such index cannot be found or it is not %s.", t),
+					Text: fmt.Sprintf(
+						"// If the index is present in the list and it is of type %s the value is returned.",
+						t,
+					),
+				},
+				{
+					Text: "//",
+				},
+				{
+					Text: fmt.Sprintf(
+						"// Otherwise the type's zero value is returned. To distinguish between an empty value and an unset value, use Lookup%s.",
+						strings.ToCamel(t),
+					),
 				},
 			},
 		},
@@ -254,35 +259,28 @@ func typeGetter(t string) *ast.FuncDecl {
 		},
 		Body: &ast.BlockStmt{
 			List: []ast.Stmt{
-				&ast.AssignStmt{
-					Tok: token.DEFINE,
-					Lhs: []ast.Expr{
-						ast.NewIdent("arg"),
-						ast.NewIdent("err"),
-					},
-					Rhs: []ast.Expr{
-						&ast.CallExpr{
-							Fun: ast.NewIdent(fmt.Sprintf("a.%sE", strings.ToCamel(t))),
-							Args: []ast.Expr{
-								ast.NewIdent("index"),
+				&ast.IfStmt{
+					Init: &ast.AssignStmt{
+						Tok: token.DEFINE,
+						Lhs: []ast.Expr{
+							ast.NewIdent("arg"),
+							ast.NewIdent("ok"),
+						},
+						Rhs: []ast.Expr{
+							&ast.CallExpr{
+								Fun: ast.NewIdent(fmt.Sprintf("a.Lookup%s", strings.ToCamel(t))),
+								Args: []ast.Expr{
+									ast.NewIdent("index"),
+								},
 							},
 						},
 					},
-				},
-				&ast.IfStmt{
-					Cond: &ast.BinaryExpr{
-						X:  ast.NewIdent("err"),
-						Op: token.NEQ,
-						Y:  ast.NewIdent("nil"),
-					},
+					Cond: ast.NewIdent("ok"),
 					Body: &ast.BlockStmt{
 						List: []ast.Stmt{
-							&ast.ExprStmt{
-								X: &ast.CallExpr{
-									Fun: ast.NewIdent("panic"),
-									Args: []ast.Expr{
-										ast.NewIdent("err"),
-									},
+							&ast.ReturnStmt{
+								Results: []ast.Expr{
+									ast.NewIdent("arg"),
 								},
 							},
 						},
@@ -290,7 +288,113 @@ func typeGetter(t string) *ast.FuncDecl {
 				},
 				&ast.ReturnStmt{
 					Results: []ast.Expr{
-						ast.NewIdent("arg"),
+						&ast.BasicLit{
+							Kind:  token.STRING,
+							Value: def,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func typeDefault(t string) *ast.FuncDecl {
+	return &ast.FuncDecl{
+		Name: ast.NewIdent(fmt.Sprintf("Default%s", strings.ToCamel(t))),
+		Doc: &ast.CommentGroup{
+			List: []*ast.Comment{
+				{
+					Text: fmt.Sprintf(
+						"// Default%s retrieves an argument of type %s from the list stored under the specified the index.",
+						strings.ToCamel(t),
+						t,
+					),
+				},
+				{
+					Text: "//",
+				},
+				{
+					Text: fmt.Sprintf(
+						"// If the index is present in the list and it is of type %s the value is returned.",
+						t,
+					),
+				},
+				{
+					Text: "//",
+				},
+				{
+					Text: "// Otherwise the specified default value is returned.",
+				},
+			},
+		},
+		Recv: &ast.FieldList{
+			List: []*ast.Field{
+				{
+					Names: []*ast.Ident{
+						ast.NewIdent("a"),
+					},
+					Type: ast.NewIdent("Arguments"),
+				},
+			},
+		},
+		Type: &ast.FuncType{
+			Params: &ast.FieldList{
+				List: []*ast.Field{
+					{
+						Names: []*ast.Ident{
+							ast.NewIdent("index"),
+						},
+						Type: ast.NewIdent("int"),
+					},
+					{
+						Names: []*ast.Ident{
+							ast.NewIdent("def"),
+						},
+						Type: ast.NewIdent(t),
+					},
+				},
+			},
+			Results: &ast.FieldList{
+				List: []*ast.Field{
+					{
+						Type: ast.NewIdent(t),
+					},
+				},
+			},
+		},
+		Body: &ast.BlockStmt{
+			List: []ast.Stmt{
+				&ast.IfStmt{
+					Init: &ast.AssignStmt{
+						Tok: token.DEFINE,
+						Lhs: []ast.Expr{
+							ast.NewIdent("arg"),
+							ast.NewIdent("ok"),
+						},
+						Rhs: []ast.Expr{
+							&ast.CallExpr{
+								Fun: ast.NewIdent(fmt.Sprintf("a.Lookup%s", strings.ToCamel(t))),
+								Args: []ast.Expr{
+									ast.NewIdent("index"),
+								},
+							},
+						},
+					},
+					Cond: ast.NewIdent("ok"),
+					Body: &ast.BlockStmt{
+						List: []ast.Stmt{
+							&ast.ReturnStmt{
+								Results: []ast.Expr{
+									ast.NewIdent("arg"),
+								},
+							},
+						},
+					},
+				},
+				&ast.ReturnStmt{
+					Results: []ast.Expr{
+						ast.NewIdent("def"),
 					},
 				},
 			},

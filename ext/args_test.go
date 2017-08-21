@@ -26,22 +26,21 @@ var argumentTests = map[string]struct {
 	"float64": {float64(1.0), float64(0.0)},
 }
 
-func TestArguments_GetE(t *testing.T) {
+func TestArguments_Lookup(t *testing.T) {
 	args := ext.Arguments{"arg"}
 
-	arg, err := args.GetE(0)
+	arg, ok := args.Lookup(0)
 
-	require.NoError(t, err)
+	require.True(t, ok)
 	assert.Equal(t, "arg", arg)
 }
 
-func TestArguments_GetE_NotFound(t *testing.T) {
+func TestArguments_Lookup_NotFound(t *testing.T) {
 	args := ext.Arguments{"arg"}
 
-	arg, err := args.GetE(1)
+	arg, ok := args.Lookup(1)
 
-	require.Error(t, err)
-	assert.EqualError(t, err, "no such index (1) in the argument list: there are only 1 item(s)")
+	require.False(t, ok)
 	assert.Nil(t, arg)
 }
 
@@ -56,57 +55,63 @@ func TestArguments_Get(t *testing.T) {
 func TestArguments_Get_NotFound(t *testing.T) {
 	args := ext.Arguments{"arg"}
 
-	assert.Panics(
-		t,
-		//errors.New("no such index (1) in the argument list: there are only 1 item(s)"),
-		func() {
-			args.Get(1)
-		},
-	)
+	arg := args.Get(1)
+
+	assert.Nil(t, arg)
 }
 
-func TestArguments_TypeE(t *testing.T) {
+func TestArguments_Default(t *testing.T) {
+	args := ext.Arguments{"arg"}
+
+	arg := args.Default(0, "another_arg")
+
+	assert.Equal(t, "arg", arg)
+}
+
+func TestArguments_Default_NotFound(t *testing.T) {
+	args := ext.Arguments{"arg"}
+
+	arg := args.Default(1, "another_arg")
+
+	assert.Equal(t, "another_arg", arg)
+}
+
+func TestArguments_TypeLookup(t *testing.T) {
 	for typ, test := range argumentTests {
-		t.Logf("Testing %s getter without error", typ)
+		t.Logf("Testing %s lookup", typ)
 
 		args := ext.Arguments{test.example}
 
-		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%sE", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
 		assert.Equal(t, test.example, arg[0].Interface())
-		assert.True(t, arg[1].IsNil())
+		assert.True(t, arg[1].Interface().(bool))
 	}
 }
 
-func TestArguments_TypeE_NotFound(t *testing.T) {
+func TestArguments_TypeLookup_NotFound(t *testing.T) {
 	for typ, test := range argumentTests {
-		t.Logf("Testing %s getter with not found error", typ)
+		t.Logf("Testing %s lookup when not found", typ)
 
 		args := ext.Arguments{test.example}
 
-		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%sE", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(1)})
-
-		err := arg[1].Interface().(error)
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(1)})
 
 		assert.Equal(t, test.def, arg[0].Interface())
-		assert.Error(t, err)
-		assert.EqualError(t, err, "no such index (1) in the argument list: there are only 1 item(s)")
+		assert.False(t, arg[1].Interface().(bool))
 	}
 }
 
-func TestArguments_TypeE_InvalidType(t *testing.T) {
+func TestArguments_TypeLookup_InvalidType(t *testing.T) {
 	for typ, test := range argumentTests {
-		t.Logf("Testing %s getter with invalid type error", typ)
+		t.Logf("Testing %s lookup when type is invalid", typ)
 
 		args := ext.Arguments{nil}
 
-		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%sE", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
-
-		err := arg[1].Interface().(error)
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
 		assert.Equal(t, test.def, arg[0].Interface())
-		assert.Error(t, err)
-		assert.EqualError(t, err, fmt.Sprintf("cannot return argument (0) as %s because it is of type <nil>", typ))
+		assert.False(t, arg[1].Interface().(bool))
 	}
 }
 
@@ -122,14 +127,38 @@ func TestArguments_Type(t *testing.T) {
 	}
 }
 
-func TestArguments_Type_Panic(t *testing.T) {
-	for typ := range argumentTests {
-		t.Logf("Testing %s getter with panic", typ)
+func TestArguments_Type_NotFound(t *testing.T) {
+	for typ, test := range argumentTests {
+		t.Logf("Testing %s getter when not found", typ)
 
 		args := ext.Arguments{nil}
 
-		assert.Panics(t, func() {
-			reflect.ValueOf(args).MethodByName(fmt.Sprintf("%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
-		})
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
+
+		assert.Equal(t, test.def, arg[0].Interface())
+	}
+}
+
+func TestArguments_TypeDefault(t *testing.T) {
+	for typ, test := range argumentTests {
+		t.Logf("Testing %s getter with default", typ)
+
+		args := ext.Arguments{test.example}
+
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Default%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0), reflect.ValueOf(test.example)})
+
+		assert.Equal(t, test.example, arg[0].Interface())
+	}
+}
+
+func TestArguments_TypeDefault_NotFound(t *testing.T) {
+	for typ, test := range argumentTests {
+		t.Logf("Testing %s getter when not found", typ)
+
+		args := ext.Arguments{nil}
+
+		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Default%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0), reflect.ValueOf(test.example)})
+
+		assert.Equal(t, test.example, arg[0].Interface())
 	}
 }
