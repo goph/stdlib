@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"go/ast"
+	"go/format"
 	"go/printer"
 	"go/token"
 	"os"
@@ -48,15 +50,20 @@ func main() {
 		return
 	}
 
-	f.WriteString("//+build experimental\n\n")
+	defer f.Close()
 
-	printer.Fprint(f, fset, file)
+	var buf bytes.Buffer
+	printer.Fprint(&buf, fset, file)
 
-	err = f.Close()
+	formatted, err := format.Source(buf.Bytes())
+
 	if err != nil {
 		fmt.Printf("%x", err)
 		return
 	}
+
+	f.WriteString("//+build experimental\n\n")
+	f.Write(formatted)
 }
 
 func typeLookup(t string, def string) *ast.FuncDecl {
