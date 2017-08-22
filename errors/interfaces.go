@@ -14,3 +14,11 @@ type ContextualError interface {
 type Causer interface {
 	Cause() error
 }
+
+// Handler is responsible for handling an error.
+//
+// This interface allows libraries to decouple from logging and error handling solutions.
+type Handler interface {
+	// Handle processes an error.
+	Handle(err error)
+}

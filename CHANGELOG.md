@@ -8,6 +8,7 @@
 - **ext:** *(experimental)* An argument list with type assertions
 - **errors:** Add `Cause` method to contextual error
 - **errors:** Add `Causer` interface
+- **errors:** Add `Handler` interface
 
 
 ## 0.8.0 - 2017-08-06
