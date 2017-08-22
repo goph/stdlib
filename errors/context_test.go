@@ -9,7 +9,7 @@ import (
 )
 
 func TestContext(t *testing.T) {
-	err := errors.New("")
+	err := errors.New("error")
 
 	kvs := []interface{}{"a", 123}
 	err = errors.With(err, kvs...)
@@ -21,6 +21,7 @@ func TestContext(t *testing.T) {
 
 	assert.Equal(t, "a", ctx[0])
 	assert.Equal(t, 123, ctx[1])
+	assert.EqualError(t, err, "error")
 }
 
 func TestContext_Multi(t *testing.T) {

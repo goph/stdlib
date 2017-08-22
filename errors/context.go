@@ -17,7 +17,7 @@ func With(err error, keyvals ...interface{}) error {
 	var kvs []interface{}
 
 	if c, ok := err.(*contextualError); ok {
-		err = c.err
+		err = c.error
 		kvs = c.keyvals
 	} else if c, ok := err.(ContextualError); ok {
 		kvs = c.Context()
@@ -29,7 +29,8 @@ func With(err error, keyvals ...interface{}) error {
 		kvs = append(kvs, ErrMissingValue)
 	}
 	return &contextualError{
-		err: err,
+		error: err,
+
 		// Limiting the capacity of the stored keyvals ensures that a new
 		// backing array is created if the slice must grow in With.
 		// Using the extra capacity without copying risks a data race.
@@ -48,7 +49,7 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 	var prevkvs []interface{}
 
 	if c, ok := err.(*contextualError); ok {
-		err = c.err
+		err = c.error
 		prevkvs = c.keyvals
 	} else if c, ok := err.(ContextualError); ok {
 		prevkvs = c.Context()
@@ -69,7 +70,7 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 	kvs = append(kvs, prevkvs...)
 
 	return &contextualError{
-		err:     err,
+		error:   err,
 		keyvals: kvs,
 	}
 }
@@ -78,13 +79,8 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 //
 // It wraps an error and a holds keyvals as the context.
 type contextualError struct {
-	err     error
+	error
 	keyvals []interface{}
-}
-
-// Error calls the underlying error and returns it's message.
-func (e *contextualError) Error() string {
-	return e.err.Error()
 }
 
 // Context returns the appended keyvals.
@@ -96,5 +92,5 @@ func (e *contextualError) Context() []interface{} {
 //
 // This method fulfills the causer interface described in github.com/pkg/errors.
 func (e *contextualError) Cause() error {
-	return e.err
+	return e.error
 }
