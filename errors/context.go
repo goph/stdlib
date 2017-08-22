@@ -2,11 +2,6 @@ package errors
 
 import "errors"
 
-// ContextualError represents an error which holds a context.
-type ContextualError interface {
-	Context() []interface{}
-}
-
 // The implementation bellow is heavily influenced by go-kit's log context.
 
 // ErrMissingValue is appended to keyvals slices with odd length to substitute
