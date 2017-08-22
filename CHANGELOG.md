@@ -6,12 +6,16 @@
 ### Added
 
 - **ext:** *(experimental)* An argument list with type assertions
-- **errors:** Add `Cause` method to contextual error
-- **errors:** Add `Causer` interface
-- **errors:** Add `Handler` interface
-- **errors:** Require `github.com/pkg/errors` as a dependency
-- **errors:** Add `StackTracer` interface
-- **errors:** Add aliases for `github.com/pkg/errors` package
+- **errors:** `Cause` method to contextual error
+- **errors:** `Causer` interface
+- **errors:** `Handler` interface
+- **errors:** `github.com/pkg/errors` as a dependency
+- **errors:** `StackTracer` interface
+- **errors:** Aliases for `github.com/pkg/errors` package
+
+### Changed
+
+- **errors:** Renamed `ContextualError` to `Contextor`
 
 
 ## 0.8.0 - 2017-08-06

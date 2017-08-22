@@ -15,9 +15,9 @@ func TestContext(t *testing.T) {
 	err = errors.With(err, kvs...)
 	kvs[1] = 0 // With should copy its key values
 
-	require.Implements(t, (*errors.ContextualError)(nil), err)
+	require.Implements(t, (*errors.Contextor)(nil), err)
 
-	ctx := err.(errors.ContextualError).Context()
+	ctx := err.(errors.Contextor).Context()
 
 	assert.Equal(t, "a", ctx[0])
 	assert.Equal(t, 123, ctx[1])
@@ -29,9 +29,9 @@ func TestContext_Multi(t *testing.T) {
 
 	err = errors.With(errors.With(err, "a", 123), "b", 321)
 
-	require.Implements(t, (*errors.ContextualError)(nil), err)
+	require.Implements(t, (*errors.Contextor)(nil), err)
 
-	ctx := err.(errors.ContextualError).Context()
+	ctx := err.(errors.Contextor).Context()
 
 	assert.Equal(t, "a", ctx[0])
 	assert.Equal(t, 123, ctx[1])
@@ -44,9 +44,9 @@ func TestContext_MultiPrefix(t *testing.T) {
 
 	err = errors.WithPrefix(errors.With(err, "a", 123), "b", 321)
 
-	require.Implements(t, (*errors.ContextualError)(nil), err)
+	require.Implements(t, (*errors.Contextor)(nil), err)
 
-	ctx := err.(errors.ContextualError).Context()
+	ctx := err.(errors.Contextor).Context()
 
 	assert.Equal(t, "a", ctx[2])
 	assert.Equal(t, 123, ctx[3])
@@ -59,9 +59,9 @@ func TestContext_MissingValue(t *testing.T) {
 
 	err = errors.WithPrefix(errors.With(err, "k0"), "k1")
 
-	require.Implements(t, (*errors.ContextualError)(nil), err)
+	require.Implements(t, (*errors.Contextor)(nil), err)
 
-	ctx := err.(errors.ContextualError).Context()
+	ctx := err.(errors.Contextor).Context()
 
 	require.Len(t, ctx, 4)
 

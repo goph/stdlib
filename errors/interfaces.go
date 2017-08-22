@@ -7,8 +7,8 @@ type ErrorCollection interface {
 	Errors() []error
 }
 
-// ContextualError represents an error which holds a context.
-type ContextualError interface {
+// Contextor represents an error which holds a context.
+type Contextor interface {
 	Context() []interface{}
 }
 

@@ -62,7 +62,7 @@ func extractContext(err error) ([]interface{}, error) {
 	if c, ok := err.(*contextualError); ok {
 		err = c.error
 		kvs = c.keyvals
-	} else if c, ok := err.(ContextualError); ok {
+	} else if c, ok := err.(Contextor); ok {
 		kvs = c.Context()
 	}
 
