@@ -10,6 +10,7 @@
 - **errors:** Add `Causer` interface
 - **errors:** Add `Handler` interface
 - **errors:** Require `github.com/pkg/errors` as a dependency
+- **errors:** Add `StackTracer` interface
 
 
 ## 0.8.0 - 2017-08-06
