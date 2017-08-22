@@ -14,14 +14,7 @@ func With(err error, keyvals ...interface{}) error {
 		return err
 	}
 
-	var kvs []interface{}
-
-	if c, ok := err.(*contextualError); ok {
-		err = c.error
-		kvs = c.keyvals
-	} else if c, ok := err.(ContextualError); ok {
-		kvs = c.Context()
-	}
+	kvs, err := extractContext(err)
 
 	kvs = append(kvs, keyvals...)
 
@@ -46,14 +39,7 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 		return err
 	}
 
-	var prevkvs []interface{}
-
-	if c, ok := err.(*contextualError); ok {
-		err = c.error
-		prevkvs = c.keyvals
-	} else if c, ok := err.(ContextualError); ok {
-		prevkvs = c.Context()
-	}
+	prevkvs, err := extractContext(err)
 
 	n := len(prevkvs) + len(keyvals)
 	if len(keyvals)%2 != 0 {
@@ -73,6 +59,20 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 		error:   err,
 		keyvals: kvs,
 	}
+}
+
+// extractContext extracts the context and optionally the wrapped error when it's the same container.
+func extractContext(err error) ([]interface{}, error) {
+	var kvs []interface{}
+
+	if c, ok := err.(*contextualError); ok {
+		err = c.error
+		kvs = c.keyvals
+	} else if c, ok := err.(ContextualError); ok {
+		kvs = c.Context()
+	}
+
+	return kvs, err
 }
 
 // contextualError is the ContextualError implementation returned by With.
