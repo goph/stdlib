@@ -21,7 +21,8 @@ func With(err error, keyvals ...interface{}) error {
 	if len(kvs)%2 != 0 {
 		kvs = append(kvs, ErrMissingValue)
 	}
-	return &contextualError{
+
+	err = &contextualError{
 		error: err,
 
 		// Limiting the capacity of the stored keyvals ensures that a new
@@ -29,6 +30,8 @@ func With(err error, keyvals ...interface{}) error {
 		// Using the extra capacity without copying risks a data race.
 		keyvals: kvs[:len(kvs):len(kvs)],
 	}
+
+	return err
 }
 
 // WithPrefix returns a new error with keyvals context appended to it.
@@ -55,10 +58,12 @@ func WithPrefix(err error, keyvals ...interface{}) error {
 
 	kvs = append(kvs, prevkvs...)
 
-	return &contextualError{
+	err = &contextualError{
 		error:   err,
 		keyvals: kvs,
 	}
+
+	return err
 }
 
 // extractContext extracts the context and optionally the wrapped error when it's the same container.
