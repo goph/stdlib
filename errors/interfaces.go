@@ -9,3 +9,8 @@ type ErrorCollection interface {
 type ContextualError interface {
 	Context() []interface{}
 }
+
+// Causer is the interface defined in github.com/pkg/errors for specifying a parent error.
+type Causer interface {
+	Cause() error
+}
