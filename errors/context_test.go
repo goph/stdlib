@@ -9,8 +9,6 @@ import (
 )
 
 func TestContext(t *testing.T) {
-	t.Parallel()
-
 	err := errors.New("")
 
 	kvs := []interface{}{"a", 123}
@@ -26,8 +24,6 @@ func TestContext(t *testing.T) {
 }
 
 func TestContext_Multi(t *testing.T) {
-	t.Parallel()
-
 	err := errors.New("")
 
 	err = errors.With(errors.With(err, "a", 123), "b", 321)
@@ -43,8 +39,6 @@ func TestContext_Multi(t *testing.T) {
 }
 
 func TestContext_MultiPrefix(t *testing.T) {
-	t.Parallel()
-
 	err := errors.New("")
 
 	err = errors.WithPrefix(errors.With(err, "a", 123), "b", 321)
@@ -60,8 +54,6 @@ func TestContext_MultiPrefix(t *testing.T) {
 }
 
 func TestContext_MissingValue(t *testing.T) {
-	t.Parallel()
-
 	err := errors.New("")
 
 	err = errors.WithPrefix(errors.With(err, "k0"), "k1")
