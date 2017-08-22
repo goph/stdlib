@@ -1,5 +1,7 @@
 package: github.com/goph/stdlib
-import: []
+import:
+- package: github.com/pkg/errors
+  version: ^0.8.0
 testImport:
 - package: github.com/stretchr/testify
   subpackages:
