@@ -98,3 +98,10 @@ func (e *contextualError) Error() string {
 func (e *contextualError) Context() []interface{} {
 	return e.keyvals
 }
+
+// Cause returns the underlying error.
+//
+// This method fulfills the causer interface described in github.com/pkg/errors.
+func (e *contextualError) Cause() error {
+	return e.err
+}
