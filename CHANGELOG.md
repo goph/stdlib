@@ -11,6 +11,7 @@
 - **errors:** Add `Handler` interface
 - **errors:** Require `github.com/pkg/errors` as a dependency
 - **errors:** Add `StackTracer` interface
+- **errors:** Add aliases for `github.com/pkg/errors` package
 
 
 ## 0.8.0 - 2017-08-06
