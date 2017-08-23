@@ -47,9 +47,7 @@ func TestCloserFunc_RecoversErrorPanic(t *testing.T) {
 		panic(err)
 	})
 
-	if got, want := closer.Close(), err; got != want {
-		t.Errorf("expected to recover a specific error, received: %v", got)
-	}
+	assert.EqualError(t, closer.Close(), "internal error")
 }
 
 func TestClosers(t *testing.T) {
@@ -96,5 +94,5 @@ func TestClose(t *testing.T) {
 	err := fmt.Errorf("error")
 	closer := ext.CloserFunc(func() { panic(err) })
 
-	assert.Equal(t, err, closer.Close())
+	assert.EqualError(t, closer.Close(), "error")
 }

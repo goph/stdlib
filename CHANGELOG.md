@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **errors:** Stack trace to recovered errors
+
+
 ## 0.9.0 - 2017-08-22
 
 ### Added

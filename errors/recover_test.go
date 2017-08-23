@@ -26,19 +26,32 @@ func TestRecover_ErrorPanic(t *testing.T) {
 	f := createRecoverFunc(err)
 
 	require.NotPanics(t, func() { f() })
-	assert.Equal(t, err, f())
+
+	v := f()
+
+	assert.EqualError(t, v, "internal error")
+	assert.Equal(t, err, v.(errors.Causer).Cause())
+	assert.Implements(t, (*errors.StackTracer)(nil), v)
 }
 
 func TestRecover_StringPanic(t *testing.T) {
 	f := createRecoverFunc("internal error")
 
 	require.NotPanics(t, func() { f() })
-	assert.Equal(t, "internal error", f().Error())
+
+	v := f()
+
+	assert.EqualError(t, v, "internal error")
+	assert.Implements(t, (*errors.StackTracer)(nil), v)
 }
 
 func TestRecover_AnyPanic(t *testing.T) {
 	f := createRecoverFunc(123)
 
 	require.NotPanics(t, func() { f() })
-	assert.Equal(t, "Unknown panic, received: 123", f().Error())
+
+	v := f()
+
+	assert.EqualError(t, v, "Unknown panic, received: 123")
+	assert.Implements(t, (*errors.StackTracer)(nil), v)
 }
