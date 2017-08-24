@@ -6,6 +6,7 @@
 ### Added
 
 - **errors:** Stack trace to recovered errors
+- **log:** Structured logger interface
 
 
 ## 0.9.0 - 2017-08-22
