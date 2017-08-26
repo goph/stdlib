@@ -6,6 +6,8 @@
 ### Added
 
 - **errors:** Stack trace to recovered errors
+- **log:** Structured logger interface
+- **log:** Default nop logger implementation
 
 
 ## 0.9.0 - 2017-08-22
