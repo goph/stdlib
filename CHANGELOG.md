@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Added
+
+- **errors:** Composite handler from Emperror
+
+
 ## 0.11.0 - 2017-08-28
 
 ### Changed
