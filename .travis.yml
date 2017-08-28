@@ -9,7 +9,6 @@ go:
 
 env:
     - TAGS=""
-    - TAGS=experimental
 matrix:
     allow_failures:
         - go: tip

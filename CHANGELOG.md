@@ -6,6 +6,7 @@
 ### Changed
 
 - **ext/types:** *(experimental)* Moved `Arguments` to types package
+- **ext/types:** Removed *experimental* flag from `Arguments`
 
 
 ## 0.10.0 - 2017-08-27

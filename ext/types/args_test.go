@@ -1,5 +1,3 @@
-//+build experimental
-
 package types_test
 
 import (
