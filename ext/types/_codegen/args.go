@@ -40,7 +40,7 @@ func main() {
 	}
 
 	file := &ast.File{
-		Name:  ast.NewIdent("ext"),
+		Name:  ast.NewIdent("types"),
 		Decls: decl,
 	}
 

@@ -1,13 +1,13 @@
 //+build experimental
 
-package ext_test
+package types_test
 
 import (
 	"fmt"
 	"reflect"
 	"testing"
 
-	"github.com/goph/stdlib/ext"
+	"github.com/goph/stdlib/ext/types"
 	"github.com/goph/stdlib/strings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -27,7 +27,7 @@ var argumentTests = map[string]struct {
 }
 
 func TestArguments_Lookup(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg, ok := args.Lookup(0)
 
@@ -36,7 +36,7 @@ func TestArguments_Lookup(t *testing.T) {
 }
 
 func TestArguments_Lookup_NotFound(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg, ok := args.Lookup(1)
 
@@ -45,7 +45,7 @@ func TestArguments_Lookup_NotFound(t *testing.T) {
 }
 
 func TestArguments_Get(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg := args.Get(0)
 
@@ -53,7 +53,7 @@ func TestArguments_Get(t *testing.T) {
 }
 
 func TestArguments_Get_NotFound(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg := args.Get(1)
 
@@ -61,7 +61,7 @@ func TestArguments_Get_NotFound(t *testing.T) {
 }
 
 func TestArguments_Default(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg := args.Default(0, "another_arg")
 
@@ -69,7 +69,7 @@ func TestArguments_Default(t *testing.T) {
 }
 
 func TestArguments_Default_NotFound(t *testing.T) {
-	args := ext.Arguments{"arg"}
+	args := types.Arguments{"arg"}
 
 	arg := args.Default(1, "another_arg")
 
@@ -80,7 +80,7 @@ func TestArguments_TypeLookup(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s lookup", typ)
 
-		args := ext.Arguments{test.example}
+		args := types.Arguments{test.example}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
@@ -93,7 +93,7 @@ func TestArguments_TypeLookup_NotFound(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s lookup when not found", typ)
 
-		args := ext.Arguments{test.example}
+		args := types.Arguments{test.example}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(1)})
 
@@ -106,7 +106,7 @@ func TestArguments_TypeLookup_InvalidType(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s lookup when type is invalid", typ)
 
-		args := ext.Arguments{nil}
+		args := types.Arguments{nil}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Lookup%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
@@ -119,7 +119,7 @@ func TestArguments_Type(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s getter", typ)
 
-		args := ext.Arguments{test.example}
+		args := types.Arguments{test.example}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
@@ -131,7 +131,7 @@ func TestArguments_Type_NotFound(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s getter when not found", typ)
 
-		args := ext.Arguments{nil}
+		args := types.Arguments{nil}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0)})
 
@@ -143,7 +143,7 @@ func TestArguments_TypeDefault(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s getter with default", typ)
 
-		args := ext.Arguments{test.example}
+		args := types.Arguments{test.example}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Default%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0), reflect.ValueOf(test.example)})
 
@@ -155,7 +155,7 @@ func TestArguments_TypeDefault_NotFound(t *testing.T) {
 	for typ, test := range argumentTests {
 		t.Logf("Testing %s getter when not found", typ)
 
-		args := ext.Arguments{nil}
+		args := types.Arguments{nil}
 
 		arg := reflect.ValueOf(args).MethodByName(fmt.Sprintf("Default%s", strings.ToCamel(typ))).Call([]reflect.Value{reflect.ValueOf(0), reflect.ValueOf(test.example)})
 

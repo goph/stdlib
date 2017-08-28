@@ -1,6 +1,6 @@
 //+build experimental
 
-package ext
+package types
 
 //go:generate go run ./_codegen/args.go
 

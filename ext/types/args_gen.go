@@ -1,6 +1,6 @@
 //+build experimental
 
-package ext
+package types
 
 // LookupString retrieves an argument of type string from the list stored under the specified the index.
 //
