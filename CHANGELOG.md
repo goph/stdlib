@@ -7,6 +7,7 @@
 
 - **errors:** Composite handler from Emperror
 - **errors:** Test handler from Emperror
+- **errors:** Utils from Emperror
 
 
 ## 0.11.0 - 2017-08-28
