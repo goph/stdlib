@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/goph/stdlib/errors"
 	"github.com/goph/stdlib/ext"
 	"github.com/goph/stdlib/internal/mocks"
 	"github.com/stretchr/testify/assert"
@@ -82,9 +81,13 @@ func TestClosers_Error(t *testing.T) {
 
 	merr := closer.Close()
 
+	type errorCollection interface {
+		Errors() []error
+	}
+
 	require.Error(t, merr)
-	require.Implements(t, (*errors.ErrorCollection)(nil), merr)
-	assert.Contains(t, merr.(errors.ErrorCollection).Errors(), err)
+	require.Implements(t, (*errorCollection)(nil), merr)
+	assert.Contains(t, merr.(errorCollection).Errors(), err)
 
 	closer1.AssertExpectations(t)
 	closer2.AssertExpectations(t)
