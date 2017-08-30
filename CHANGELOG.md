@@ -9,6 +9,7 @@
 - **errors:** Test handler from Emperror
 - **errors:** Utils from Emperror
 - **errors:** Handler function type for log-like functions (like `log.Print`, `testing.T.Error`)
+- **errors:** Handler function type
 
 
 ## 0.11.0 - 2017-08-28
