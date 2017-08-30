@@ -8,6 +8,7 @@
 - **errors:** Composite handler from Emperror
 - **errors:** Test handler from Emperror
 - **errors:** Utils from Emperror
+- **errors:** Handler function type for log-like functions (like `log.Print`, `testing.T.Error`)
 
 
 ## 0.11.0 - 2017-08-28
