@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Removed
+
+- **ext:** `errors` package usage from Closer implementations
+
+
 ## 0.12.0 - 2017-08-30
 
 ### Added
