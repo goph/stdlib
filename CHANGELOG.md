@@ -6,6 +6,7 @@
 ### Removed
 
 - **ext:** `errors` package usage from Closer implementations
+- `errors` package moved to [github.com/goph/emperror](https://github.com/goph/emperror)
 
 
 ## 0.12.0 - 2017-08-30
