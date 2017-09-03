@@ -1,6 +1,13 @@
 # Change Log
 
 
+## Unreleased
+
+### Removed
+
+- `log` package
+
+
 ## 0.13.0 - 2017-08-30
 
 ### Removed
