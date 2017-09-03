@@ -60,24 +60,6 @@ func (c Closers) Close() error {
 	return merr.ErrOrNil()
 }
 
-type multiError []error
-
-func (e multiError) Error() string {
-	return "Multiple errors happened"
-}
-
-func (e multiError) Errors() []error {
-	return e
-}
-
-func (e multiError) ErrOrNil() error {
-	if len(e) == 0 {
-		return nil
-	}
-
-	return e
-}
-
 // Close calls Close method on a struct if it implements the Closer interface.
 func Close(closer interface{}) error {
 	if c, ok := closer.(Closer); ok {
