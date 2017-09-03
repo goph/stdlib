@@ -10,17 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type testCloser struct {
-	called bool
-	err    error
-}
-
-func (c *testCloser) Close() error {
-	c.called = true
-
-	return c.err
-}
-
 func TestCloserFunc_CallsUnderlyingFunc(t *testing.T) {
 	var called bool
 
