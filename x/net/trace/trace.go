@@ -7,9 +7,17 @@ import (
 	"golang.org/x/net/trace"
 )
 
+// AuthFunc is the type for the trace.AuthRequest variable.
+type AuthFunc func(req *stdhttp.Request) (any, sensitive bool)
+
 // NoAuth disables authentication entirely. Useful for remote tracing.
 var NoAuth = func(req *stdhttp.Request) (any, sensitive bool) {
 	return true, true
+}
+
+// SetAuth is a proxy for the trace.AuthRequest variable to avoid importing it's package.
+func SetAuth(f AuthFunc) {
+	trace.AuthRequest = f
 }
 
 // RegisterRoutes register pprof routes in an http.HandlerAcceptor.

@@ -3,6 +3,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Improved trace package
+
 ### Removed
 
 - `log` package
