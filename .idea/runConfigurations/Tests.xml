@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tests" type="GoTestRunConfiguration" factoryName="Go Test">
+    <module name="stdlib" />
+    <working_directory value="$PROJECT_DIR$/" />
+    <framework value="gotest" />
+    <kind value="DIRECTORY" />
+    <package value="github.com/goph/stdlib" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$" />
+    <method />
+  </configuration>
+</component>
