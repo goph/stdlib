@@ -1,8 +1,6 @@
 package os
 
-import (
-	"syscall"
-)
+import "syscall"
 
 // DefaultEnv retrieves the value of the environment variable named by the key.
 //

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Moved `MustEnv` to separate file
+- Moved `DefaultEnv` to separate file
 
 
 ## 0.14.0 - 2017-09-06
