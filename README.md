@@ -7,6 +7,16 @@
 **All kinds of utilities and extensions of the standard library.**
 
 
+## Usage
+
+This project contains a set of tools that may also be part of the standard library,
+but for some reason they are left out.
+
+Since the repo is large with all kinds of tools, the recommended way is to simply copy
+the code you need to an internal package of your project (along with the tests).
+
+That will keep your project free of extra dependencies, provide tested code.
+
 ## Documentation
 
 The project closely follows the package structure in the [standard library](https://golang.org/pkg/#stdlib)
