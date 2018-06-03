@@ -8,10 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **os:** `Env` function to return the complete environment as a map of strings
+
 ### Changed
 
-- Moved `MustEnv` to separate file
-- Moved `DefaultEnv` to separate file
+- **os:** Moved `MustEnv` to separate file
+- **os:** Moved `DefaultEnv` to separate file
 
 
 ## 0.14.0 - 2017-09-06
