@@ -1,35 +1,27 @@
-package time_test
+package time
 
 import (
 	"testing"
 
 	"fmt"
-	stdtime "time"
-
-	"github.com/goph/stdlib/time"
-	"github.com/stretchr/testify/assert"
+	"time"
 )
 
-func TestSystemClock(t *testing.T) {
-	ti := stdtime.Now()
-
-	stdtime.Sleep(stdtime.Nanosecond)
-
-	ti = ti.Add(stdtime.Second)
-	assert.True(t, time.SystemClock.Now().Before(ti), "expected clock's current time to be before %v", ti)
-}
-
 func TestStoppedClock(t *testing.T) {
-	ti := stdtime.Date(2017, stdtime.May, 10, 22, 52, 0, 0, stdtime.UTC)
+	now := time.Date(2017, time.May, 10, 22, 52, 0, 0, time.UTC)
 
-	clock := time.StoppedAt(ti)
+	clock := StoppedAt(now)
 
-	assert.Equal(t, ti, clock.Now())
+	realNow := clock.Now()
+
+	if now != realNow {
+		t.Errorf("StoppedAt is expected to return the exact time it is stopped at, got: %s", realNow)
+	}
 }
 
 func ExampleStoppedAt() {
-	t := stdtime.Date(2017, stdtime.May, 10, 22, 52, 0, 0, stdtime.UTC)
-	clock := time.StoppedAt(t)
+	now := time.Date(2017, time.May, 10, 22, 52, 0, 0, time.UTC)
+	clock := StoppedAt(now)
 
 	fmt.Println(clock.Now())
 	// Output: 2017-05-10 22:52:00 +0000 UTC
