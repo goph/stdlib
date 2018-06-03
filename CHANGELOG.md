@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **os:** Moved `MustEnv` to separate file
 - **os:** Moved `DefaultEnv` to separate file
 
+### Removed
+
+- **time:** `Clock` interface: it should be defined by consumers, though it is considered to be part of the public API
+
 
 ## 0.14.0 - 2017-09-06
 

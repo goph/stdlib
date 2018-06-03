@@ -2,12 +2,6 @@ package time
 
 import "time"
 
-// Clock tells the time.
-type Clock interface {
-	// Now tells the actual time.
-	Now() time.Time
-}
-
 // ClockFunc wraps an ordinary function and makes it a Clock.
 type ClockFunc func() time.Time
 
