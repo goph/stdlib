@@ -17,7 +17,7 @@ func TestDefaultEnv(t *testing.T) {
 	value := DefaultEnv("key", "default")
 
 	if value != "value" {
-		t.Errorf("DefaultEnv is supposed to return 'value', got: %s", value)
+		t.Errorf("DefaultEnv is expcted to return: value, got: %s", value)
 	}
 }
 
@@ -27,6 +27,6 @@ func TestDefaultEnv_NotFound(t *testing.T) {
 	value := DefaultEnv("key", "default")
 
 	if value != "default" {
-		t.Errorf("DefaultEnv is supposed to return 'default', got: %s", value)
+		t.Errorf("DefaultEnv is expected to return: default, got: %s", value)
 	}
 }

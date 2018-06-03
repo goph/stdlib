@@ -18,14 +18,14 @@ func TestMustEnv(t *testing.T) {
 		err := recover()
 
 		if err != nil {
-			t.Fatal("MustEnv is not supposed to panic for key 'key'", err)
+			t.Fatal("MustEnv is not expected to panic for key: key", err)
 		}
 	}()
 
 	value := MustEnv("key")
 
 	if value != "value" {
-		t.Errorf("MustEnv is supposed to return 'value', got: %s", value)
+		t.Errorf("MustEnv is expected to return: value, got: %s", value)
 	}
 }
 
@@ -36,7 +36,7 @@ func TestMustEnv_Panics(t *testing.T) {
 		err := recover()
 
 		if err == nil {
-			t.Fatal("MustEnv is supposed to panic for key 'test_key', but it did not")
+			t.Fatal("MustEnv is expected to panic for key: test_key")
 		}
 	}()
 
