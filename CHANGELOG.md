@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - **os:** `Env` function to return the complete environment as a map of strings
+- **time:** `Abs` function to time package for durations
 
 ### Changed
 
