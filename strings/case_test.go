@@ -1,11 +1,6 @@
-package strings_test
+package strings
 
-import (
-	"testing"
-
-	"github.com/goph/stdlib/strings"
-	"github.com/stretchr/testify/assert"
-)
+import "testing"
 
 func TestToCamel(t *testing.T) {
 	data := map[string]string{
@@ -44,8 +39,12 @@ func TestToCamel(t *testing.T) {
 		"Foo--Bar":    "Foo-Bar",
 	}
 
-	for in, exp := range data {
-		assert.Equal(t, exp, strings.ToCamel(in), "converting '%s' to camel case failed, expected: %v, actual: %v", in)
+	for in, expected := range data {
+		actual := ToCamel(in)
+
+		if actual != expected {
+			t.Errorf("converting %q to camel case failed, expected: %q, actual: %q", in, expected, actual)
+		}
 	}
 }
 
@@ -63,8 +62,12 @@ func TestToSnake(t *testing.T) {
 		"Foo_-Bar":  "foo__bar",
 	}
 
-	for in, exp := range data {
-		assert.Equal(t, exp, strings.ToSnake(in), "converting '%s' to snake case failed, expected: %v, actual: %v", in)
+	for in, expected := range data {
+		actual := ToSnake(in)
+
+		if actual != expected {
+			t.Errorf("converting %q to snake case failed, expected: %q, actual: %q", in, expected, actual)
+		}
 	}
 }
 
@@ -82,8 +85,12 @@ func TestToSpinal(t *testing.T) {
 		"Foo_-Bar":  "foo--bar",
 	}
 
-	for in, exp := range data {
-		assert.Equal(t, exp, strings.ToSpinal(in), "converting '%s' to spinal case failed, expected: %v, actual: %v", in)
+	for in, expected := range data {
+		actual := ToSpinal(in)
+
+		if actual != expected {
+			t.Errorf("converting %q to spinal case failed, expected: %q, actual: %q", in, expected, actual)
+		}
 	}
 }
 
@@ -101,7 +108,11 @@ func TestToTrain(t *testing.T) {
 		"Foo_-Bar":  "Foo--Bar",
 	}
 
-	for in, exp := range data {
-		assert.Equal(t, exp, strings.ToTrain(in), "converting '%s' to train case failed, expected: %v, actual: %v", in)
+	for in, expected := range data {
+		actual := ToTrain(in)
+
+		if actual != expected {
+			t.Errorf("converting %q to train case failed, expected: %q, actual: %q", in, expected, actual)
+		}
 	}
 }
